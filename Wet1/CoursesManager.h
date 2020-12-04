@@ -13,7 +13,7 @@ private:
     //todo: add time tree two way avl
     AVLtree<Course> courseTree;
 public:
-    explicit CoursesManager(); //c'tor
+    CoursesManager(); //c'tor
     ~CoursesManager();
     CoursesManager* Init();
     void addCourse (int courseID, int numOfClasses);
