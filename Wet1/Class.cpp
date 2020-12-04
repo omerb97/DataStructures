@@ -18,3 +18,7 @@ int Class::getTime()
     return time;
 }
 
+void Class::addTime(int time) {
+    this->time += time;
+}
+
