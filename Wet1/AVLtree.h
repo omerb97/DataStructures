@@ -34,9 +34,13 @@ private:
 
     Node<T> *maximumNode(Node<T> *node);
 
-    void rebalance(Node<T> *node);
+    void rebalanceAfterInsert(Node<T> *node);
+
+    void rebalanceAfterDelete(Node<T> *node);
 
     void balanceTree(Node<T> *node);
+
+    void updateBalance(Node<T> *node);
 
     void leftRotate(Node<T> *node);
 
@@ -90,7 +94,7 @@ void AVLtree<T>::balanceTree(Node<T> *node)
 {
     if (node->balance_factor < -1 || node->balance_factor > 1)
     {
-        rebalance(node);
+        rebalanceAfterInsert(node);
         return;
     }
 
@@ -230,6 +234,7 @@ void AVLtree<T>::rightRotate(Node<T> *node)
 {
     Node<T> *temp = node->left;
     node->left = temp->right;
+
     if (temp->right != nullptr)
     {
         temp->right->parent = node;
@@ -248,7 +253,7 @@ void AVLtree<T>::rightRotate(Node<T> *node)
         node->parent->left = temp;
     }
     temp->right = node;
-    node->parent = node;
+    node->parent = temp;
 
     // update the balance factor
     if (temp->balance_factor < 0)
@@ -271,7 +276,7 @@ void AVLtree<T>::rightRotate(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::rebalance(Node<T> *node)
+void AVLtree<T>::rebalanceAfterInsert(Node<T> *node)
 {
     if (node->balance_factor > 0)
     {
@@ -330,12 +335,10 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
     else if (data < node->data)
     {
         node->left = deleteNodeHelper(node->left, data);
-        node->left->parent = node;
     }
     else if (data > node->data)
     {
         node->right = deleteNodeHelper(node->right, data);
-        node->right->parent = node;
     }
     else
     {
@@ -389,8 +392,7 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
         }
     }
 
-    node->balance_factor = getBalanceFactor(node);
-    rebalance(node);
+    updateBalance(node);
 
     return node;
 }
@@ -435,7 +437,7 @@ void AVLtree<T>::clearHelper(Node<T> *node)
     }
 }
 
-template <class T>
+template<class T>
 int AVLtree<T>::max(int x, int y)
 {
     if (x > y)
@@ -481,6 +483,51 @@ template<class T>
 void AVLtree<T>::preOrder()
 {
     preOrderHelper(root);
+}
+
+template<class T>
+void AVLtree<T>::updateBalance(Node<T> *node)
+{
+    if (!node)
+    {
+        return;
+    }
+
+    node->balance_factor = getBalanceFactor(node);
+    if (node->balance_factor < -1 || node->balance_factor > 1)
+    {
+        rebalanceAfterDelete(node);
+        return;
+    }
+    updateBalance(node->parent);
+}
+
+template<class T>
+void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
+{
+    //LL
+    if (node->balance_factor > 1 && node->left->balance_factor >= 0)
+    {
+        rightRotate(node);
+    }
+        //LR
+    else if (node->balance_factor > 1 && node->left->balance_factor < 0)
+    {
+        leftRotate(node->left);
+        rightRotate(node);
+    }
+        // Right Right Case
+    else if (node->balance_factor < -1 && node->right->balance_factor <= 0)
+    {
+        leftRotate(node);
+    }
+        // Right Left Case
+    else if (node->balance_factor < -1 && node->right->balance_factor > 0)
+    {
+        rightRotate(node->right);
+        leftRotate(node);
+    }
+
 }
 
 #endif
