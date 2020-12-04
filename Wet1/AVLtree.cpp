@@ -162,3 +162,31 @@ AVLtree<T>* AVLtree<T>::Search(AVLtree<T>* root, T wantedData)
         return Search(root->GetRight());
     }
 }
+
+template<class T>
+AVLtree<T> *AVLtree<T>::Search(AVLtree *root, int wantedData) {
+    if (root == NULL){ // if at the end it will return NULL it means it hasn't found it
+        return NULL;
+    }
+    if (root->GetData() == wantedData){
+        return root;
+    }
+    if (root->GetData() > wantedData){
+        return Search(root->GetLeft());
+    }
+    if (root->GetData() < wantedData){
+        return Search(root->GetRight());
+    }
+}
+
+template<class T>
+bool AVLtree<T>::IsExist(int wantedData) {
+    if (this->Search(this, wantedData) == NULL){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+

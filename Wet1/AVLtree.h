@@ -1,7 +1,7 @@
 
 #ifndef AVL_AVLTREE_H
 #define AVL_AVLTREE_H
-//test
+
 
 #include <iostream>
 
@@ -33,6 +33,8 @@ public:
     AVLtree* Insert (AVLtree* parent, T insertData);
     AVLtree* Inorder (AVLtree* root);
     AVLtree* Search (AVLtree* root, T wantedData);
+    AVLtree* Search (AVLtree* root, int wantedData);
+    bool IsExist(int wantedData);
 };
 
 

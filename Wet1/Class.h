@@ -17,6 +17,8 @@ public:
 
     int getTime();
 
+    void addTime(int time);
+
 };
 
 #endif
