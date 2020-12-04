@@ -29,3 +29,21 @@ StatusType AddCourse (void *DS, int courseID, int numOfClasses)
     }
     return SUCCESS;
 }
+
+StatusType RemoveCourse(void *DS, int courseID)
+{
+    if (DS == nullptr){
+        return INVALID_INPUT;
+    }
+    try{
+        auto targetManager = (CoursesManager*) DS;
+        targetManager->removeCourse(courseID);
+    }
+    catch (const InvalidInputs& e){
+        return INVALID_INPUT;
+    }
+    catch (const TreeValueNoExist& e){
+        return FAILURE;
+    }
+    return SUCCESS
+}
