@@ -18,7 +18,7 @@ public:
     CoursesManager* Init();
     void addCourse (int courseID, int numOfClasses);
     void removeCourse (int CourseID);
-    void watchTime (int courseID, int classID, int time);
+    void watchClass (int courseID, int classID, int time);
     void timeViewed (int courseID, int classID, int *timeviewed);
     void Quit();
 };

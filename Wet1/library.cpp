@@ -45,5 +45,23 @@ StatusType RemoveCourse(void *DS, int courseID)
     catch (const TreeValueNoExist& e){
         return FAILURE;
     }
-    return SUCCESS
+    return SUCCESS;
+}
+
+StatusType WatchClass(void *DS, int courseID, int classID, int time)
+{
+    if (DS == nullptr){
+        return INVALID_INPUT;
+    }
+    try{
+        auto targetManager = (CoursesManager*) DS;
+        targetManager->watchClass(courseID, classID, time);
+    }
+    catch (const InvalidInputs& e){
+        return INVALID_INPUT;
+    }
+    catch (const TreeValueNoExist& e){
+        return FAILURE;
+    }
+    return SUCCESS;
 }

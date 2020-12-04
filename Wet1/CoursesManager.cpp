@@ -39,7 +39,7 @@ void CoursesManager::removeCourse(int CourseID)
 
 }
 
-void CoursesManager::watchTime(int courseID, int classID, int time)
+void CoursesManager::watchClass(int courseID, int classID, int time)
 {
     if (this == nullptr || courseID <= 0 || classID <=0 || time <=0 ){
         throw InvalidInputs();
