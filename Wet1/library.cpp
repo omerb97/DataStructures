@@ -65,3 +65,21 @@ StatusType WatchClass(void *DS, int courseID, int classID, int time)
     }
     return SUCCESS;
 }
+
+StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed)
+{
+    if (DS == nullptr){
+        return INVALID_INPUT;
+    }
+    try{
+        auto targetManager = (CoursesManager*) DS;
+        targetManager->timeViewed(courseID, classID, timeViewed);
+    }
+    catch (const InvalidInputs& e){
+        return INVALID_INPUT;
+    }
+    catch (const TreeValueNoExist& e){
+        return FAILURE;
+    }
+    return SUCCESS;
+}
