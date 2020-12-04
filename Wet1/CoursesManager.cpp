@@ -10,7 +10,7 @@ CoursesManager* CoursesManager::Init()
 void CoursesManager::addCourse( int courseID, int numOfClasses)
 {
     //todo: add allocation error
-    if (this == nullptr || courseID <=0 || numOfClasses <= 0){
+    if (courseID <=0 || numOfClasses <= 0){
         throw InvalidInputs();
     }
 
@@ -24,12 +24,12 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
 
 void CoursesManager::removeCourse(int CourseID)
 {
-    if (this == nullptr || CourseID <= 0){
+    if (CourseID <= 0){
         throw InvalidInputs();
     }
 
     auto searchCourse = new Course(CourseID, 0);
-    if (this->courseTree.Search(&courseTree, *searchCourse) == NULL){
+    if (this->courseTree.Search(&courseTree, *searchCourse) == nullptr){
         TreeValueNoExist();
     }
 
@@ -41,7 +41,7 @@ void CoursesManager::removeCourse(int CourseID)
 
 void CoursesManager::watchClass(int courseID, int classID, int time)
 {
-    if (this == nullptr || courseID <= 0 || classID <=0 || time <=0 ){
+    if (courseID <= 0 || classID <=0 || time <=0 ){
         throw InvalidInputs();
     }
     Course wantedCourse = (this->courseTree.Search(&courseTree, courseID))->GetData();
@@ -62,7 +62,7 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
 
 void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
 {
-    if (this == nullptr || courseID <= 0 || classID <= 0){
+    if (courseID <= 0 || classID <= 0){
         throw InvalidInputs();
     }
     if (!this->courseTree.IsExist(courseID)){
