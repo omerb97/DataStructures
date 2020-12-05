@@ -24,3 +24,8 @@ const char *TreeValueNoExist::what() const noexcept
     return "This value does not exist in this tree";
 }
 
+const char *TooManyClasses::what() const noexcept
+{
+    return "This value does not exist in this tree";
+}
+

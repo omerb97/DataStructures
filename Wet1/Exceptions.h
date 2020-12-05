@@ -34,4 +34,10 @@ public:
     const char* what() const noexcept override;
 };
 
+class TooManyClasses : public Exception
+{
+public:
+    const char* what() const noexcept override;
+};
+
 #endif
