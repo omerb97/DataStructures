@@ -96,15 +96,43 @@ StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed)
     {
         return ALLOCATION_ERROR;
     }
-    catch (const InvalidInputs& e){
+    catch (const InvalidInputs& e)
+    {
         return INVALID_INPUT;
     }
-    catch (const TreeValueNoExist& e){
+    catch (const TreeValueNoExist& e)
+    {
         return FAILURE;
     }
     return SUCCESS;
 }
 
+StatusType GetMostViewedClasses(void *DS, int numOfClasses, int *courses, int *classes)
+{
+    if (DS == nullptr)
+    {
+        return INVALID_INPUT;
+    }
+    try
+    {
+        auto targetManager = (CoursesManager*) DS;
+        targetManager->getMostViewedClasses(numOfClasses, courses, classes);
+    }
+    catch (const std::bad_alloc& e)
+    {
+        return ALLOCATION_ERROR;
+    }
+    catch (const InvalidInputs& e)
+    {
+        return INVALID_INPUT;
+    }
+    catch (const TooManyClasses& e)
+    {
+        return FAILURE;
+    }
+    //todo: do we need to put a catch for treeValueNotFound
+    return SUCCESS;
+}
 void Quit (void** DS)
 {
     auto deleteManager = (CoursesManager*)(*DS);
