@@ -75,7 +75,7 @@ public:
     Node<T> *search(T wantedData);
 
     T *GetData(Node<T>* node);
-    void searchByMax(T* maxArray, int printNum);
+    void searchByMax(Node<T> node, T* maxArray, int printNum, int index = 0);
 };
 
 template<class T>
@@ -568,11 +568,20 @@ T *AVLtree<T>::GetData(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::searchByMax(T *maxArray, int printNum)
+int AVLtree<T>::searchByMax(Node<T> node, T *maxArray, int printNum, int index)
 {
+
     if (printNum <= 0){
-        return;
+        return 0;
     }
+
+    maxArray[index] = node.data;
+    printNum = searchByMax(node.parent, *maxArray, printNum-1, index+1);
+    if (printNum > 0){
+        printNum = searchByMax(node.left, *maxArray, printNum,index+1)
+    }
+
+
 }
 
 template<class T>
