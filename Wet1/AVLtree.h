@@ -19,6 +19,8 @@ class AVLtree
 {
 private:
     Node<T> *root;
+    Node<T> *max_node;
+    Node<T> *min_node;
 
     void createNode(Node<T> *node, T data);
 
@@ -62,6 +64,9 @@ public:
     void insert(T insertData);
 
     Node<T> *deleteNode(T data);
+
+    T getMax();
+    T getMin();
 
     void inOrder();
 
@@ -151,6 +156,20 @@ void AVLtree<T>::insert(T insertData)
     else
     {
         y->right = node;
+    }
+
+    if(!max_node)
+    {
+        max_node = node;
+        min_node = node;
+    }
+    else if(max_node && max_node->data < insertData)
+    {
+        max_node = node;
+    }
+    else if(min_node && min_node->data > insertData)
+    {
+        min_node = node;
     }
 
     balanceTree(node);
@@ -400,6 +419,15 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
 template<class T>
 Node<T> *AVLtree<T>::deleteNode(T data)
 {
+    if(max_node->data == data)
+    {
+        max_node = maximumNode(root);
+    }
+    if(min_node->data == data)
+    {
+        min_node = minimumNode(root);
+    }
+
     Node<T> *deletedNode = deleteNodeHelper(root, data);
     return deletedNode;
 }
@@ -528,6 +556,26 @@ void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
         leftRotate(node);
     }
 
+}
+
+template<class T>
+T AVLtree<T>::getMax()
+{
+    if(max_node)
+    {
+        return max_node->data;
+    }
+    return nullptr;
+}
+
+template<class T>
+T AVLtree<T>::getMin()
+{
+    if(min_node)
+    {
+        return min_node->data;
+    }
+    return nullptr;
 }
 
 #endif
