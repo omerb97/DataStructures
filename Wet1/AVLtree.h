@@ -68,6 +68,8 @@ public:
     void preOrder();
 
     Node<T> *search(T wantedData);
+
+    T *GetData(Node<T>* node)
 };
 
 template<class T>
@@ -528,6 +530,11 @@ void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
         leftRotate(node);
     }
 
+}
+
+template<class T>
+T *AVLtree<T>::GetData(Node<T> *node) {
+    return node->data;
 }
 
 #endif

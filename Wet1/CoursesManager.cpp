@@ -1,11 +1,5 @@
 #include "CoursesManager.h"
 
-CoursesManager* CoursesManager::Init()
-{
-    //todo: create a new one with all the neccery one. blank
-    CoursesManager reVal;
-    return *reVal;
-}
 
 void CoursesManager::addCourse( int courseID, int numOfClasses)
 {
@@ -15,11 +9,11 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
     }
 
     auto newCourse = new Course(courseID, numOfClasses);
-    if (this->courseTree.Search(&courseTree, *newCourse ) != nullptr || this->courseTree.Search(&courseTree, *newCourse ) != nullptr){
+    if (this->courseTree.search(*newCourse ) != nullptr || this->courseTree.search(*newCourse) != nullptr){
         throw TreeValueExists();
     }
     //will only reach here if everything worked
-    this->courseTree.Insert(&courseTree, *newCourse);
+    this->courseTree.insert(*newCourse);
 }
 
 void CoursesManager::removeCourse(int CourseID)
@@ -29,8 +23,8 @@ void CoursesManager::removeCourse(int CourseID)
     }
 
     auto searchCourse = new Course(CourseID, 0);
-    if (this->courseTree.Search(&courseTree, *searchCourse) == nullptr){
-        TreeValueNoExist();
+    if (this->courseTree.search(*searchCourse) == nullptr){
+        throw TreeValueNoExist();
     }
 
     //remove course from the courses tree
@@ -44,9 +38,10 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
     if (courseID <= 0 || classID <=0 || time <=0 ){
         throw InvalidInputs();
     }
-    Course wantedCourse = (this->courseTree.Search(&courseTree, courseID))->GetData();
+    Course searchCourse = Course(courseID,1);
+    Course wantedCourse = (this->courseTree.search(searchCourse))->data;
 
-    if (!this->courseTree.IsExist(courseID)){
+    if (this->courseTree.search(wantedCourse) == nullptr){
         throw TreeValueNoExist();
     }
     if (classID > wantedCourse.getNumOfClasses()){
@@ -65,10 +60,13 @@ void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
     if (courseID <= 0 || classID <= 0){
         throw InvalidInputs();
     }
-    if (!this->courseTree.IsExist(courseID)){
+
+    Course searchCourse = Course(courseID,1);
+    Node<Course> *isExistCourse = (this->courseTree.search(searchCourse));
+    if (isExistCourse == nullptr){
         throw TreeValueNoExist();
     }
-    Course wantedCourse = this->courseTree.Search(&courseTree, courseID)->GetData();
+    Course wantedCourse = this->courseTree.search(searchCourse)->data;
 
     if (classID > wantedCourse.getNumOfClasses()){
         throw InvalidInputs();
