@@ -20,6 +20,10 @@ public:
     int getNumOfClasses();
 
     Class getClass(int id);
+
+    bool operator<(const Course c) const;
+
+    bool operator==(const Course c) const;
 };
 
 #endif

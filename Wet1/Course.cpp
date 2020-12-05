@@ -6,8 +6,9 @@ Course::Course(int course_id, int num_of_classes)
     this->num_of_classes = num_of_classes;
     this->classes = new Class[num_of_classes];
 
-    for (int i = 0; i < num_of_classes; i++) {
-        classes[i] = Class(i, 0);
+    for (int i = 0; i < num_of_classes; i++)
+    {
+        classes[i] = Class(i, course_id, 0);
     }
 }
 
@@ -29,4 +30,25 @@ int Course::getCourseId()
 int Course::getNumOfClasses()
 {
     return num_of_classes;
+}
+
+bool Course::operator<(const Course c) const
+{
+    if (course_id < c.course_id)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Course::operator==(const Course c) const
+{
+    if(course_id == c.course_id)
+    {
+        return true;
+    }
+    return false;
 }
