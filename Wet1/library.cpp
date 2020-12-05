@@ -84,7 +84,9 @@ StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed)
     return SUCCESS;
 }
 
-void Quit (void **DS)
+void Quit (void** DS)
 {
-    (CoursesManager**) DS;
+    auto deleteManager = (CoursesManager*)(*DS);
+    delete deleteManager;
+    *DS = nullptr;
 }
