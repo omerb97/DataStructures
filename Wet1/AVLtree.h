@@ -69,7 +69,8 @@ public:
 
     Node<T> *search(T wantedData);
 
-    T *GetData(Node<T>* node)
+    T *GetData(Node<T>* node);
+    void searchByMax(T* maxArray, int printNum);
 };
 
 template<class T>
@@ -533,8 +534,17 @@ void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
 }
 
 template<class T>
-T *AVLtree<T>::GetData(Node<T> *node) {
+T *AVLtree<T>::GetData(Node<T> *node)
+{
     return node->data;
+}
+
+template<class T>
+void AVLtree<T>::searchByMax(T *maxArray, int printNum)
+{
+    if (printNum <= 0){
+        return;
+    }
 }
 
 #endif

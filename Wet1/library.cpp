@@ -83,3 +83,8 @@ StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed)
     }
     return SUCCESS;
 }
+
+void Quit (void **DS)
+{
+    (CoursesManager**) DS;
+}

@@ -7,13 +7,12 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
     if (courseID <=0 || numOfClasses <= 0){
         throw InvalidInputs();
     }
-
-    auto newCourse = new Course(courseID, numOfClasses);
-    if (this->courseTree.search(*newCourse ) != nullptr || this->courseTree.search(*newCourse) != nullptr){
+    auto newCourse = Course(courseID, numOfClasses);
+    if (this->courseTree.search(newCourse ) != nullptr || this->courseTree.search(newCourse) != nullptr){
         throw TreeValueExists();
     }
     //will only reach here if everything worked
-    this->courseTree.insert(*newCourse);
+    this->courseTree.insert(newCourse);
 }
 
 void CoursesManager::removeCourse(int CourseID)
@@ -22,13 +21,19 @@ void CoursesManager::removeCourse(int CourseID)
         throw InvalidInputs();
     }
 
-    auto searchCourse = new Course(CourseID, 0);
-    if (this->courseTree.search(*searchCourse) == nullptr){
+    auto searchCourse = Course(CourseID, 1);
+    if (this->courseTree.search(searchCourse) == nullptr){
         throw TreeValueNoExist();
     }
+    auto wantedCourse = this->courseTree.search(searchCourse)->data;
+    int numOfClasses = wantedCourse.getNumOfClasses();
+    for (int i=0; i < numOfClasses; i++){
+        //todo: check ptr array
+        //todo: do a loop to delete all courses
+    }
 
-    //remove course from the courses tree
-    //todo: make sure remove is added from courses tree
+    this->courseTree.deleteNode(searchCourse);
+
     //todo: remove from time tree
 
 }
@@ -47,12 +52,18 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
     if (classID > wantedCourse.getNumOfClasses()){
         throw InvalidInputs();
     }
-    //todo: classID has to be above 0 so it is not 0 to (n-1) as we are used to
+
     Class wantedClass = wantedCourse.getClass(classID);
     //todo: the function wnated class returns by value? so maybe if we change some value here it wont change it?
-    wantedClass.addTime(time);
-
-    //todo: add time add if it is watched and need to add time to avl tree
+    if (wantedClass.getTime() != 0){
+        this->timeTree.deleteNode(wantedClass);
+        wantedClass.addTime(time);
+        this->timeTree.insert(wantedClass);
+    }
+    if (wantedClass.getTime() == 0){
+        wantedClass.addTime(time);
+        this->timeTree.insert(wantedClass);
+    }
 }
 
 void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)

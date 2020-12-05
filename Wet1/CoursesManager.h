@@ -10,8 +10,8 @@
 class CoursesManager
 {
 private:
-    //todo: add time tree two way avl
     AVLtree<Course> courseTree;
+    AVLtree<Class> timeTree;
 public:
     CoursesManager(); //c'tor
     ~CoursesManager();
