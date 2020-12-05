@@ -1,13 +1,13 @@
 #include "CoursesManager.h"
 
 
-CoursesManager::~CoursesManager() {
-    //todo: is this the correct way to do it or should we do it some default way
-    auto *deleteTime = &(this->timeTree);
-    delete deleteTime;
-    auto *deleteCourses = &(this->courseTree);
-    delete deleteCourses;
-}
+//CoursesManager::~CoursesManager() {
+//    //todo: is this the correct way to do it or should we do it some default way
+//    auto *deleteTime = &(this->timeTree);
+//    delete deleteTime;
+//    auto *deleteCourses = &(this->courseTree);
+//    delete deleteCourses;
+//}
 
 void CoursesManager::addCourse( int courseID, int numOfClasses)
 {
