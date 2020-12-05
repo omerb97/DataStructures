@@ -12,6 +12,8 @@ class CoursesManager
 private:
     AVLtree<Course> courseTree;
     AVLtree<Class> timeTree;
+    int totalClasses;
+    int watchedClasses;
 public:
     CoursesManager(); //c'tor
     ~CoursesManager();
@@ -20,6 +22,6 @@ public:
     void removeCourse (int CourseID);
     void watchClass (int courseID, int classID, int time);
     void timeViewed (int courseID, int classID, int *timeviewed);
-    void Quit();
+    void getMostViewedClasses(int numOfClasses, int *courses, int *classes);
 };
 #endif

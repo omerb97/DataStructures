@@ -22,6 +22,7 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
     }
     //will only reach here if everything worked
     this->courseTree.insert(newCourse);
+    totalClasses += numOfClasses;
 }
 
 void CoursesManager::removeCourse(int CourseID)
@@ -37,14 +38,19 @@ void CoursesManager::removeCourse(int CourseID)
     }
     auto wantedCourse = this->courseTree.search(searchCourse)->data;
     int numOfClasses = wantedCourse.getNumOfClasses();
-    for (int i=0; i < numOfClasses; i++){
-        //todo: check ptr array
-        //todo: do a loop to delete all courses
+    for (int i=0; i < numOfClasses; i++)
+    {
+        if(timeTree.search(wantedCourse.getClass(i)) != nullptr)
+        {
+            watchedClasses--;
+            this->timeTree.deleteNode(wantedCourse.getClass(i));
+        }
+
+
     }
+    totalClasses = totalClasses - wantedCourse.getNumOfClasses();
+    this->courseTree.deleteNode(searchCourse); //todo: does this free the data inside?
 
-    this->courseTree.deleteNode(searchCourse);
-
-    //todo: remove from time tree
 
 }
 
@@ -72,6 +78,7 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
     }
     if (wantedClass.getTime() == 0){
         wantedClass.addTime(time);
+        watchedClasses++;
         this->timeTree.insert(wantedClass);
     }
 }
@@ -84,17 +91,28 @@ void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
 
     Course searchCourse = Course(courseID,1);
     Node<Course> *isExistCourse = (this->courseTree.search(searchCourse));
-    if (isExistCourse == nullptr){
+    if (isExistCourse == nullptr)
+    {
         throw TreeValueNoExist();
     }
     Course wantedCourse = this->courseTree.search(searchCourse)->data;
 
-    if (classID > wantedCourse.getNumOfClasses()){
+    if (classID > wantedCourse.getNumOfClasses())
+    {
         throw InvalidInputs();
     }
 
     Class wantedClass = wantedCourse.getClass(classID);
     *timeviewed = wantedClass.getTime();
+
+}
+
+void CoursesManager::getMostViewedClasses(int numOfClasses, int *courses, int *classes)
+{
+    if (numOfClasses <= 0 )
+    {
+        throw InvalidInputs();
+    }
 
 }
 
