@@ -1,6 +1,14 @@
 #include "CoursesManager.h"
 
 
+CoursesManager::~CoursesManager() {
+    //todo: is this the correct way to do it or should we do it some default way
+    auto *deleteTime = &(this->timeTree);
+    delete deleteTime;
+    auto *deleteCourses = &(this->courseTree);
+    delete deleteCourses;
+}
+
 void CoursesManager::addCourse( int courseID, int numOfClasses)
 {
     //todo: add allocation error
@@ -87,3 +95,5 @@ void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
     *timeviewed = wantedClass.getTime();
 
 }
+
+
