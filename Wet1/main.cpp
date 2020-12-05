@@ -1,7 +1,6 @@
 #include <iostream>
 #include "AVLtree.h"
 
-//test
 int main()
 {
     AVLtree<int> *t = new AVLtree<int>();
