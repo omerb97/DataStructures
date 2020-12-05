@@ -11,12 +11,13 @@
 
 void CoursesManager::addCourse( int courseID, int numOfClasses)
 {
-    //todo: add allocation error
-    if (courseID <=0 || numOfClasses <= 0){
+    if (courseID <=0 || numOfClasses <= 0)
+    {
         throw InvalidInputs();
     }
     auto newCourse = Course(courseID, numOfClasses);
-    if (this->courseTree.search(newCourse ) != nullptr || this->courseTree.search(newCourse) != nullptr){
+    if (this->courseTree.search(newCourse ) != nullptr || this->courseTree.search(newCourse) != nullptr)
+    {
         throw TreeValueExists();
     }
     //will only reach here if everything worked
@@ -25,7 +26,8 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
 
 void CoursesManager::removeCourse(int CourseID)
 {
-    if (CourseID <= 0){
+    if (CourseID <= 0)
+    {
         throw InvalidInputs();
     }
 

@@ -7,7 +7,12 @@ void* Init()
         CoursesManager *DS = new CoursesManager();
         return (void*) DS;
     }
-    catch (const Exception& e){
+    catch (const std::bad_alloc& e)
+    {
+        return nullptr;
+    }
+    catch (const Exception& e)
+    {
         return nullptr;
     }
 }
@@ -20,6 +25,10 @@ StatusType AddCourse (void *DS, int courseID, int numOfClasses)
     try{
         auto targetManager = (CoursesManager*) DS;
         targetManager->addCourse(courseID, numOfClasses);
+    }
+    catch (const std::bad_alloc& e)
+    {
+        return ALLOCATION_ERROR;
     }
     catch (const InvalidInputs& e){
         return INVALID_INPUT;
@@ -39,6 +48,10 @@ StatusType RemoveCourse(void *DS, int courseID)
         auto targetManager = (CoursesManager*) DS;
         targetManager->removeCourse(courseID);
     }
+    catch (const std::bad_alloc& e)
+    {
+        return ALLOCATION_ERROR;
+    }
     catch (const InvalidInputs& e){
         return INVALID_INPUT;
     }
@@ -57,6 +70,10 @@ StatusType WatchClass(void *DS, int courseID, int classID, int time)
         auto targetManager = (CoursesManager*) DS;
         targetManager->watchClass(courseID, classID, time);
     }
+    catch (const std::bad_alloc& e)
+    {
+        return ALLOCATION_ERROR;
+    }
     catch (const InvalidInputs& e){
         return INVALID_INPUT;
     }
@@ -74,6 +91,10 @@ StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed)
     try{
         auto targetManager = (CoursesManager*) DS;
         targetManager->timeViewed(courseID, classID, timeViewed);
+    }
+    catch (const std::bad_alloc& e)
+    {
+        return ALLOCATION_ERROR;
     }
     catch (const InvalidInputs& e){
         return INVALID_INPUT;
