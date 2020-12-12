@@ -3,6 +3,7 @@
 #define AVL_AVLTREE_H
 
 #include <iostream>
+#include "Course.h"
 
 template<class T>
 struct Node
@@ -66,6 +67,7 @@ public:
     Node<T> *deleteNode(T data);
 
     T getMax();
+
     T getMin();
 
     void inOrder();
@@ -74,8 +76,15 @@ public:
 
     Node<T> *search(T wantedData);
 
-    T *GetData(Node<T>* node);
-    void searchByMax(Node<T> node, T* maxArray, int printNum, int index = 0);
+    T *GetData(Node<T> *node);
+
+    void searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index);
+
+    void reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index);
+
+    friend void reverseInOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+
+    friend void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
 };
 
 template<class T>
@@ -161,16 +170,16 @@ void AVLtree<T>::insert(T insertData)
         y->right = node;
     }
 
-    if(!max_node)
+    if (!max_node)
     {
         max_node = node;
         min_node = node;
     }
-    else if(max_node && max_node->data < insertData)
+    else if (max_node && max_node->data < insertData)
     {
         max_node = node;
     }
-    else if(min_node && min_node->data > insertData)
+    else if (min_node && min_node->data > insertData)
     {
         min_node = node;
     }
@@ -422,11 +431,11 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
 template<class T>
 Node<T> *AVLtree<T>::deleteNode(T data)
 {
-    if(max_node->data == data)
+    if (max_node->data == data)
     {
         max_node = maximumNode(root);
     }
-    if(min_node->data == data)
+    if (min_node->data == data)
     {
         min_node = minimumNode(root);
     }
@@ -568,26 +577,58 @@ T *AVLtree<T>::GetData(Node<T> *node)
 }
 
 template<class T>
-int AVLtree<T>::searchByMax(Node<T> node, T *maxArray, int printNum, int index)
+void AVLtree<T>::reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index)
 {
-
-    if (printNum <= 0){
-        return 0;
+    if (node == NULL)
+    {
+        return;
     }
-
-    maxArray[index] = node.data;
-    printNum = searchByMax(node.parent, *maxArray, printNum-1, index+1);
-    if (printNum > 0){
-        printNum = searchByMax(node.left, *maxArray, printNum,index+1)
+    reverseInOrder(node->right, maxArray, maxIndex, index);
+    if (maxIndex >= *index)
+    {
+        maxArray[*index] = node->data;
+        (*index)++;
     }
-
-
+    else
+    {
+        return;
+    }
+    reverseInOrder(node->left, maxArray, maxIndex, index);
 }
+
+template<class T>
+void AVLtree<T>::searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index)
+{
+    if (maxIndex >= *index)
+    {
+        maxArray[*index] = node->data;
+        (*index)++;
+    }
+    else
+    {
+        return;
+    }
+
+    if (node->left)
+    {
+        reverseInOrder(node->left, maxArray, maxIndex, index);
+    }
+
+    if (!node->parent)
+    {
+        reverseInOrder(node->left, maxArray, maxIndex, index);
+    }
+    else
+    {
+        searchByMax(node->parent, maxArray, maxIndex, index);
+    }
+}
+
 
 template<class T>
 T AVLtree<T>::getMax()
 {
-    if(max_node)
+    if (max_node)
     {
         return max_node->data;
     }
@@ -597,11 +638,67 @@ T AVLtree<T>::getMax()
 template<class T>
 T AVLtree<T>::getMin()
 {
-    if(min_node)
+    if (min_node)
     {
         return min_node->data;
     }
     return nullptr;
+}
+
+void reverseInOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    reverseInOrder(node->right, maxArray, maxIndex, index);
+
+    for (int i = 0; i < node->data.getNumOfClasses(); i++)
+    {
+        Class temp = node->data.getClass(i);
+        if (temp.getTime() == 0 && maxIndex >= *index)
+        {
+            maxArray[*index] = Class(temp);
+            (*index)++;
+        }
+        if (maxIndex < *index)
+        {
+            return;
+        }
+    }
+
+    reverseInOrder(node->left, maxArray, maxIndex, index);
+}
+
+void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+{
+    for (int i = 0; i < node->data.getNumOfClasses(); i++)
+    {
+        Class temp = node->data.getClass(i);
+        if (temp.getTime() == 0 && maxIndex >= *index)
+        {
+            maxArray[*index] = Class(temp);
+            (*index)++;
+        }
+        if (maxIndex < *index)
+        {
+            return;
+        }
+    }
+
+    if (node->left)
+    {
+        reverseInOrder(node->left, maxArray, maxIndex, index);
+    }
+
+    if (!node->parent)
+    {
+        reverseInOrder(node->left, maxArray, maxIndex, index);
+    }
+    else
+    {
+        searchByMax(node->parent, maxArray, maxIndex, index);
+    }
 }
 
 #endif
