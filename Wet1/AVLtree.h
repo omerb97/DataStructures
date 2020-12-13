@@ -614,11 +614,7 @@ void AVLtree<T>::searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *inde
         reverseInOrder(node->left, maxArray, maxIndex, index);
     }
 
-    if (!node->parent)
-    {
-        reverseInOrder(node->left, maxArray, maxIndex, index);
-    }
-    else
+    if (node->parent)
     {
         searchByMax(node->parent, maxArray, maxIndex, index);
     }
@@ -691,11 +687,7 @@ void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
         reverseInOrder(node->left, maxArray, maxIndex, index);
     }
 
-    if (!node->parent)
-    {
-        reverseInOrder(node->left, maxArray, maxIndex, index);
-    }
-    else
+    if (node->parent)
     {
         searchByMax(node->parent, maxArray, maxIndex, index);
     }
