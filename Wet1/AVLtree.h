@@ -456,6 +456,7 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
 template<class T>
 Node<T> *AVLtree<T>::deleteNode(T data)
 {
+    Node<T> *deletedNode = deleteNodeHelper(root, data);
     if (max_node->data == data)
     {
         max_node = maximumNode(root);
@@ -465,7 +466,6 @@ Node<T> *AVLtree<T>::deleteNode(T data)
         min_node = minimumNode(root);
     }
 
-    Node<T> *deletedNode = deleteNodeHelper(root, data);
     return deletedNode;
 }
 
@@ -473,7 +473,7 @@ template<class T>
 Node<T> *AVLtree<T>::minimumNode(Node<T> *node)
 {
     Node<T> *current = node;
-    while (current->left != nullptr)
+    while (current && current->left != nullptr)
     {
         current = current->left;
     }
@@ -484,7 +484,7 @@ template<class T>
 Node<T> *AVLtree<T>::maximumNode(Node<T> *node)
 {
     Node<T> *current = node;
-    while (current->right != nullptr)
+    while (current && current->right != nullptr)
     {
         current = current->right;
     }
