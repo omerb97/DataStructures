@@ -82,9 +82,9 @@ public:
 
     void reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index);
 
-    friend void reverseInOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+    friend void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
 
-    friend void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+    friend void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
 };
 
 template<class T>
@@ -641,13 +641,13 @@ Node<T>* AVLtree<T>::getMin()
     return nullptr;
 }
 
-void reverseInOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
 {
     if (node == NULL)
     {
         return;
     }
-    reverseInOrder(node->right, maxArray, maxIndex, index);
+    inOrder(node->left, maxArray, maxIndex, index);
 
     for (int i = 0; i < node->data.getNumOfClasses(); i++)
     {
@@ -663,10 +663,10 @@ void reverseInOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *inde
         }
     }
 
-    reverseInOrder(node->left, maxArray, maxIndex, index);
+    inOrder(node->right, maxArray, maxIndex, index);
 }
 
-void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
 {
     for (int i = 0; i < node->data.getNumOfClasses(); i++)
     {
@@ -682,14 +682,14 @@ void searchByMax(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
         }
     }
 
-    if (node->left)
+    if (node->right)
     {
-        reverseInOrder(node->left, maxArray, maxIndex, index);
+        inOrder(node->right, maxArray, maxIndex, index);
     }
 
     if (node->parent)
     {
-        searchByMax(node->parent, maxArray, maxIndex, index);
+        searchByMin(node->parent, maxArray, maxIndex, index);
     }
 }
 
