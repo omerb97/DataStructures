@@ -16,7 +16,7 @@ void CoursesManager::addCourse( int courseID, int numOfClasses)
         throw InvalidInputs();
     }
     auto newCourse = Course(courseID, numOfClasses);
-    if (this->courseTree.search(newCourse ) != nullptr || this->courseTree.search(newCourse) != nullptr)
+    if (this->courseTree.search(newCourse) != nullptr)
     {
         throw TreeValueExists();
     }
