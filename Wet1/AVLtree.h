@@ -66,9 +66,9 @@ public:
 
     Node<T> *deleteNode(T data);
 
-    T getMax();
+    Node<T>* getMax();
 
-    T getMin();
+    Node<T>* getMin();
 
     void inOrder();
 
@@ -622,21 +622,21 @@ void AVLtree<T>::searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *inde
 
 
 template<class T>
-T AVLtree<T>::getMax()
+Node<T>* AVLtree<T>::getMax()
 {
     if (max_node)
     {
-        return max_node->data;
+        return max_node;
     }
     return nullptr;
 }
 
 template<class T>
-T AVLtree<T>::getMin()
+Node<T>* AVLtree<T>::getMin()
 {
     if (min_node)
     {
-        return min_node->data;
+        return min_node;
     }
     return nullptr;
 }

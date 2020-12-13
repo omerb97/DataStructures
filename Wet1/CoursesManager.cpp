@@ -117,23 +117,30 @@ void CoursesManager::getMostViewedClasses(int numOfClasses, int *courses, int *c
     {
         throw TooManyClasses();
     }
+
+    int index = 0;
     if (numOfClasses <= watchedClasses)
     {
         Class mostViewed[numOfClasses];
-        //timeTree.searchByMax(mostViewed, numOfClasses, 0);
+        timeTree.searchByMax(timeTree.getMax(),mostViewed, numOfClasses, &index);
+        if (numOfClasses > watchedClasses)
+        {
+
+        }
         for (int i = 0; i < numOfClasses; i++)
         {
             courses[i] = mostViewed[i].getCourseId();
             classes[i] = mostViewed[i].getClassId();
         }
+
     }
     if (numOfClasses > watchedClasses)
     {
         int unwatchedIndex = totalClasses - watchedClasses;
         int unwatchedNeeded = numOfClasses - watchedClasses;
-        Class watchedMostViewed[watchedClasses];
+        Class mostViewed[watchedClasses];
         Class unwatchedLexico[unwatchedNeeded];
-        //timeTree.searchByMax(watchedMostViewed, watchedClasses, 0);
+        timeTree.searchByMax(timeTree.getMax(),mostViewed, numOfClasses, &index);
         int i = 0;
         for (i; i < watchedClasses; i++)
         {
