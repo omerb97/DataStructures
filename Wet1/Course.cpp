@@ -64,3 +64,8 @@ bool Course::operator==(const Course c) const
     }
     return false;
 }
+
+void Course::addTime(int class_id, int time)
+{
+    classes[class_id].addTime(time);
+}

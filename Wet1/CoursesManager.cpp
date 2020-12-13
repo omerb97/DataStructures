@@ -81,6 +81,7 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
         watchedClasses++;
         this->timeTree.insert(wantedClass);
     }
+    wantedCourse.addTime(classID, time);
 }
 
 void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)

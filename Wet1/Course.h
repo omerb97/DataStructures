@@ -23,6 +23,8 @@ public:
 
     Class getClass(int id);
 
+    void addTime(int class_id, int time);
+
     bool operator<(const Course c) const;
 
     bool operator>(const Course c) const;
