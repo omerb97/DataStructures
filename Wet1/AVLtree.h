@@ -13,7 +13,19 @@ struct Node
     Node *right;
     Node *parent;
     int balance_factor;
+    Node() {};
+    Node(T data, Node* left, Node* right, Node* parent, int balance_factor);
 };
+
+template<class T>
+Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor)
+{
+    this->data = data;
+    this->left = left;
+    this->right = right;
+    this->parent = parent;
+    this->balance_factor = balance_factor;
+}
 
 template<class T>
 class AVLtree
@@ -137,7 +149,7 @@ void AVLtree<T>::balanceTree(Node<T> *node)
 template<class T>
 void AVLtree<T>::insert(T insertData)
 {
-    Node<T> *node = new Node<T>;
+    auto *node = new Node<T>();
     createNode(node, insertData);
     Node<T> *y = nullptr;
     Node<T> *x = this->root;
@@ -351,9 +363,9 @@ Node<T> *AVLtree<T>::searchHelper(Node<T> *node, T data)
 
     if (data < node->data)
     {
-        return searchTreeHelper(node->left, data);
+        return searchHelper(node->left, data);
     }
-    return searchTreeHelper(node->right, data);
+    return searchHelper(node->right, data);
 }
 
 template<class T>

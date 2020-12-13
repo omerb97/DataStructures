@@ -15,8 +15,8 @@ private:
     int totalClasses;
     int watchedClasses;
 public:
-    CoursesManager(); //c'tor
-    ~CoursesManager();
+    CoursesManager() = default; //c'tor
+    ~CoursesManager() = default;
     CoursesManager* Init();
     void addCourse (int courseID, int numOfClasses);
     void removeCourse (int CourseID);

@@ -44,6 +44,18 @@ bool Course::operator<(const Course c) const
     }
 }
 
+bool Course::operator>(const Course c) const
+{
+    if (course_id > c.course_id)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool Course::operator==(const Course c) const
 {
     if(course_id == c.course_id)

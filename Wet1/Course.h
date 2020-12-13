@@ -11,6 +11,8 @@ private:
     Class *classes;
 
 public:
+    Course() = default;
+
     Course(int course_id, int num_of_classes);
 
     ~Course();
@@ -22,6 +24,8 @@ public:
     Class getClass(int id);
 
     bool operator<(const Course c) const;
+
+    bool operator>(const Course c) const;
 
     bool operator==(const Course c) const;
 };
