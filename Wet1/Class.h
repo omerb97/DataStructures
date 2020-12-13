@@ -14,6 +14,8 @@ public:
 
     Class(int class_id, int course_id, int time);
 
+    Class(Class const &c);
+
     int getClassId();
 
     int getCourseId();
