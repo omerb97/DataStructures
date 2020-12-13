@@ -15,6 +15,7 @@ struct Node
     int balance_factor;
     Node() {};
     Node(T data, Node* left, Node* right, Node* parent, int balance_factor);
+    ~Node();
 };
 
 template<class T>
@@ -25,6 +26,14 @@ Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor)
     this->right = right;
     this->parent = parent;
     this->balance_factor = balance_factor;
+}
+
+template<class T>
+Node<T>::~Node()
+{
+    delete left;
+    delete right;
+    delete parent;
 }
 
 template<class T>
@@ -98,6 +107,10 @@ public:
 
     friend void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
 };
+
+void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+
+void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
 
 template<class T>
 AVLtree<T>::AVLtree()
@@ -651,58 +664,6 @@ Node<T>* AVLtree<T>::getMin()
         return min_node;
     }
     return nullptr;
-}
-
-void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
-{
-    if (node == NULL)
-    {
-        return;
-    }
-    inOrder(node->left, maxArray, maxIndex, index);
-
-    for (int i = 0; i < node->data.getNumOfClasses(); i++)
-    {
-        Class temp = node->data.getClass(i);
-        if (temp.getTime() == 0 && maxIndex >= *index)
-        {
-            maxArray[*index] = Class(temp);
-            (*index)++;
-        }
-        if (maxIndex < *index)
-        {
-            return;
-        }
-    }
-
-    inOrder(node->right, maxArray, maxIndex, index);
-}
-
-void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
-{
-    for (int i = 0; i < node->data.getNumOfClasses(); i++)
-    {
-        Class temp = node->data.getClass(i);
-        if (temp.getTime() == 0 && maxIndex >= *index)
-        {
-            maxArray[*index] = Class(temp);
-            (*index)++;
-        }
-        if (maxIndex < *index)
-        {
-            return;
-        }
-    }
-
-    if (node->right)
-    {
-        inOrder(node->right, maxArray, maxIndex, index);
-    }
-
-    if (node->parent)
-    {
-        searchByMin(node->parent, maxArray, maxIndex, index);
-    }
 }
 
 #endif
