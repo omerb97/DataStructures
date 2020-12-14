@@ -9,13 +9,13 @@
 //    delete deleteCourses;
 //}
 
-void CoursesManager::addCourse( int courseID, int numOfClasses)
+void CoursesManager::addCourse(int courseID, int numOfClasses)
 {
-    if (courseID <=0 || numOfClasses <= 0)
+    if (courseID <= 0 || numOfClasses <= 0)
     {
         throw InvalidInputs();
     }
-    auto newCourse = Course(courseID, numOfClasses);
+    Course newCourse(courseID, numOfClasses);
     if (this->courseTree.search(newCourse) != nullptr)
     {
         throw TreeValueExists();
@@ -32,21 +32,19 @@ void CoursesManager::removeCourse(int CourseID)
         throw InvalidInputs();
     }
 
-    auto searchCourse = Course(CourseID, 1);
-    if (this->courseTree.search(searchCourse) == nullptr){
+    Course searchCourse(CourseID, 1);
+    if (this->courseTree.search(searchCourse) == nullptr) {
         throw TreeValueNoExist();
     }
     auto wantedCourse = this->courseTree.search(searchCourse)->data;
     int numOfClasses = wantedCourse.getNumOfClasses();
-    for (int i=0; i < numOfClasses; i++)
+    for (int i = 0; i < numOfClasses; i++)
     {
-        if(timeTree.search(wantedCourse.getClass(i)) != nullptr)
+        if (timeTree.search(wantedCourse.getClass(i)) != nullptr)
         {
             watchedClasses--;
             this->timeTree.deleteNode(wantedCourse.getClass(i));
         }
-
-
     }
     totalClasses = totalClasses - wantedCourse.getNumOfClasses();
     this->courseTree.deleteNode(searchCourse); //todo: does this free the data inside?
@@ -56,42 +54,42 @@ void CoursesManager::removeCourse(int CourseID)
 
 void CoursesManager::watchClass(int courseID, int classID, int time)
 {
-    if (courseID <= 0 || classID <=0 || time <=0 ){
+    if (courseID <= 0 || classID <= 0 || time <= 0) {
         throw InvalidInputs();
     }
-    Course searchCourse = Course(courseID,1);
-    Course wantedCourse = (this->courseTree.search(searchCourse))->data;
+    Course searchCourse(courseID, 1);
+    Course* wantedCourse = (&((this->courseTree.search(searchCourse))->data));
 
-    if (this->courseTree.search(wantedCourse) == nullptr){
+    if (this->courseTree.search(*wantedCourse) == nullptr) {
         throw TreeValueNoExist();
     }
-    if (classID > wantedCourse.getNumOfClasses()){
+    if (classID > wantedCourse->getNumOfClasses()) {
         throw InvalidInputs();
     }
 
-    Class wantedClass = wantedCourse.getClass(classID);
+    Class wantedClass = wantedCourse->getClass(classID);
     //todo: the function wnated class returns by value? so maybe if we change some value here it wont change it?
-    if (wantedClass.getTime() != 0){
+    if (wantedClass.getTime() != 0) {
         this->timeTree.deleteNode(wantedClass);
         wantedClass.addTime(time);
         this->timeTree.insert(wantedClass);
     }
-    if (wantedClass.getTime() == 0){
+    if (wantedClass.getTime() == 0) {
         wantedClass.addTime(time);
         watchedClasses++;
         this->timeTree.insert(wantedClass);
     }
-    wantedCourse.addTime(classID, time);
+    wantedCourse->addTime(classID, time);
 }
 
-void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
+void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
 {
-    if (courseID <= 0 || classID <= 0){
+    if (courseID <= 0 || classID <= 0) {
         throw InvalidInputs();
     }
 
-    Course searchCourse = Course(courseID,1);
-    Node<Course> *isExistCourse = (this->courseTree.search(searchCourse));
+    Course searchCourse(courseID, 1);
+    Node<Course>* isExistCourse = (this->courseTree.search(searchCourse));
     if (isExistCourse == nullptr)
     {
         throw TreeValueNoExist();
@@ -108,9 +106,9 @@ void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
 
 }
 
-void CoursesManager::getMostViewedClasses(int numOfClasses, int *courses, int *classes)
+void CoursesManager::getMostViewedClasses(int numOfClasses, int* courses, int* classes)
 {
-    if (numOfClasses <= 0 )
+    if (numOfClasses <= 0)
     {
         throw InvalidInputs();
     }
@@ -121,8 +119,8 @@ void CoursesManager::getMostViewedClasses(int numOfClasses, int *courses, int *c
 
     int index = 0;
 
-    Class mostViewed[numOfClasses];
-    timeTree.searchByMax(timeTree.getMax(),mostViewed, numOfClasses, &index);
+    Class* mostViewed = new Class[numOfClasses];
+    timeTree.searchByMax(timeTree.getMax(), mostViewed, numOfClasses, &index);
     if (numOfClasses > watchedClasses)
     {
         searchByMin(courseTree.getMin(), mostViewed, numOfClasses, &index);

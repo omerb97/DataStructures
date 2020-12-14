@@ -8,12 +8,16 @@ class Course
 private:
     int course_id;
     int num_of_classes;
-    Class *classes;
+    Class* classes;
 
 public:
     Course() = default;
 
+    Course(Course& course);
+
     Course(int course_id, int num_of_classes);
+
+    Course& operator=(Course& other);
 
     ~Course();
 

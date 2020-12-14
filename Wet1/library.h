@@ -18,29 +18,29 @@
 extern "C" {
 #endif
 
-/* Return Values
- * ----------------------------------- */
-typedef enum {
-    SUCCESS = 0,
-    FAILURE = -1,
-    ALLOCATION_ERROR = -2,
-    INVALID_INPUT = -3
-} StatusType;
+    /* Return Values
+     * ----------------------------------- */
+    typedef enum {
+        SUCCESS = 0,
+        FAILURE = -1,
+        ALLOCATION_ERROR = -2,
+        INVALID_INPUT = -3
+    } StatusType;
 
 
-void *Init();
+    void* Init();
 
-StatusType AddCourse (void *DS, int courseID, int numOfClasses);
+    StatusType AddCourse(void* DS, int courseID, int numOfClasses);
 
-StatusType RemoveCourse(void *DS, int courseID);
+    StatusType RemoveCourse(void* DS, int courseID);
 
-StatusType WatchClass(void *DS, int courseID, int classID, int time);
+    StatusType WatchClass(void* DS, int courseID, int classID, int time);
 
-StatusType TimeViewed(void *DS, int courseID, int classID, int *timeViewed);
+    StatusType TimeViewed(void* DS, int courseID, int classID, int* timeViewed);
 
-StatusType GetMostViewedClasses(void *DS, int numOfClasses, int *courses, int *classes);
+    StatusType GetMostViewedClasses(void* DS, int numOfClasses, int* courses, int* classes);
 
-void Quit(void** DS);
+    void Quit(void** DS);
 
 #ifdef __cplusplus
 }

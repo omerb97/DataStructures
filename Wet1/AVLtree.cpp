@@ -1,6 +1,6 @@
 #include "AVLtree.h"
 
-void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+void inOrder(Node<Course>* node, Class* maxArray, int maxIndex, int* index)
 {
     if (node == NULL)
     {
@@ -25,7 +25,7 @@ void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
     inOrder(node->right, maxArray, maxIndex, index);
 }
 
-void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index)
+void searchByMin(Node<Course>* node, Class* maxArray, int maxIndex, int* index)
 {
     for (int i = 0; i < node->data.getNumOfClasses(); i++)
     {

@@ -9,9 +9,9 @@ template<class T>
 struct Node
 {
     T data;
-    Node *left;
-    Node *right;
-    Node *parent;
+    Node* left;
+    Node* right;
+    Node* parent;
     int balance_factor;
     Node() {};
     Node(T data, Node* left, Node* right, Node* parent, int balance_factor);
@@ -19,7 +19,7 @@ struct Node
 };
 
 template<class T>
-Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor)
+Node<T>::Node(T data, Node* left, Node* right, Node* parent, int balance_factor)
 {
     this->data = data;
     this->left = left;
@@ -31,61 +31,67 @@ Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor)
 template<class T>
 Node<T>::~Node()
 {
-    delete left;
-    delete right;
-    delete parent;
+    if (left)
+    {
+        delete left;
+    }
+
+    if (right)
+    {
+        delete right;
+    }
 }
 
 template<class T>
 class AVLtree
 {
 private:
-    Node<T> *root;
-    Node<T> *max_node;
-    Node<T> *min_node;
+    Node<T>* root;
+    Node<T>* max_node;
+    Node<T>* min_node;
 
-    void createNode(Node<T> *node, T data);
+    void createNode(Node<T>* node, T data);
 
-    void inOrderHelper(Node<T> *node);
+    void inOrderHelper(Node<T>* node);
 
-    void preOrderHelper(Node<T> *node);
+    void preOrderHelper(Node<T>* node);
 
-    Node<T> *searchHelper(Node<T> *node, T data);
+    Node<T>* searchHelper(Node<T>* node, T data);
 
-    Node<T> *deleteNodeHelper(Node<T> *node, T data);
+    Node<T>* deleteNodeHelper(Node<T>* node, T data);
 
-    Node<T> *minimumNode(Node<T> *node);
+    Node<T>* minimumNode(Node<T>* node);
 
-    Node<T> *maximumNode(Node<T> *node);
+    Node<T>* maximumNode(Node<T>* node);
 
-    void rebalanceAfterInsert(Node<T> *node);
+    void rebalanceAfterInsert(Node<T>* node);
 
-    void rebalanceAfterDelete(Node<T> *node);
+    void rebalanceAfterDelete(Node<T>* node);
 
-    void balanceTree(Node<T> *node);
+    void balanceTree(Node<T>* node);
 
-    void updateBalance(Node<T> *node);
+    void updateBalance(Node<T>* node);
 
-    void leftRotate(Node<T> *node);
+    void leftRotate(Node<T>* node);
 
-    void rightRotate(Node<T> *node);
+    void rightRotate(Node<T>* node);
 
-    void clearHelper(Node<T> *node);
+    void clearHelper(Node<T>* node);
 
-    int getBalanceFactor(Node<T> *node);
+    int getBalanceFactor(Node<T>* node);
 
-    int getHeight(Node<T> *node);
+    int getHeight(Node<T>* node);
 
     int max(int x, int y);
 
 public:
     AVLtree(); //c'tor
-    AVLtree(const AVLtree &node); //copy c'tor
+    AVLtree(const AVLtree& node); //copy c'tor
     ~AVLtree(); //d'tor
 
     void insert(T insertData);
 
-    Node<T> *deleteNode(T data);
+    Node<T>* deleteNode(T data);
 
     Node<T>* getMax();
 
@@ -95,22 +101,22 @@ public:
 
     void preOrder();
 
-    Node<T> *search(T wantedData);
+    Node<T>* search(T wantedData);
 
-    T *GetData(Node<T> *node);
+    T* GetData(Node<T>* node);
 
-    void searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index);
+    void searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* index);
 
-    void reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index);
+    void reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* index);
 
-    friend void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+    friend void inOrder(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
 
-    friend void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+    friend void searchByMin(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
 };
 
-void inOrder(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+void inOrder(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
 
-void searchByMin(Node<Course> *node, Class *maxArray, int maxIndex, int *index);
+void searchByMin(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
 
 template<class T>
 AVLtree<T>::AVLtree()
@@ -120,7 +126,7 @@ AVLtree<T>::AVLtree()
 
 
 template<class T>
-AVLtree<T>::AVLtree(const AVLtree &node) : root(node.root)
+AVLtree<T>::AVLtree(const AVLtree& node) : root(node.root)
 {
 
 }
@@ -132,7 +138,7 @@ AVLtree<T>::~AVLtree()
 }
 
 template<class T>
-void AVLtree<T>::balanceTree(Node<T> *node)
+void AVLtree<T>::balanceTree(Node<T>* node)
 {
     if (node->balance_factor < -1 || node->balance_factor > 1)
     {
@@ -162,10 +168,9 @@ void AVLtree<T>::balanceTree(Node<T> *node)
 template<class T>
 void AVLtree<T>::insert(T insertData)
 {
-    auto *node = new Node<T>();
-    createNode(node, insertData);
-    Node<T> *y = nullptr;
-    Node<T> *x = this->root;
+    Node<T>* node = new Node<T>(insertData, nullptr, nullptr, nullptr, 0);
+    Node<T>* y = nullptr;
+    Node<T>* x = this->root;
 
     while (x != nullptr)
     {
@@ -219,7 +224,7 @@ void AVLtree<T>::inOrder()
 }
 
 template<class T>
-void AVLtree<T>::createNode(Node<T> *node, T data)
+void AVLtree<T>::createNode(Node<T>* node, T data)
 {
     node->data = data;
     node->parent = nullptr;
@@ -229,7 +234,7 @@ void AVLtree<T>::createNode(Node<T> *node, T data)
 }
 
 template<class T>
-void AVLtree<T>::inOrderHelper(Node<T> *node)
+void AVLtree<T>::inOrderHelper(Node<T>* node)
 {
     if (node == NULL)
     {
@@ -241,9 +246,9 @@ void AVLtree<T>::inOrderHelper(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::leftRotate(Node<T> *node)
+void AVLtree<T>::leftRotate(Node<T>* node)
 {
-    Node<T> *temp = node->right;
+    Node<T>* temp = node->right;
     node->right = temp->left;
     if (temp->left != nullptr)
     {
@@ -286,9 +291,9 @@ void AVLtree<T>::leftRotate(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::rightRotate(Node<T> *node)
+void AVLtree<T>::rightRotate(Node<T>* node)
 {
-    Node<T> *temp = node->left;
+    Node<T>* temp = node->left;
     node->left = temp->right;
 
     if (temp->right != nullptr)
@@ -332,7 +337,7 @@ void AVLtree<T>::rightRotate(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::rebalanceAfterInsert(Node<T> *node)
+void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
 {
     if (node->balance_factor > 0)
     {
@@ -361,13 +366,14 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T> *node)
 }
 
 template<class T>
-Node<T> *AVLtree<T>::search(T wantedData)
+Node<T>* AVLtree<T>::search(T wantedData)
 {
-    return searchHelper(root, wantedData);
+    T temp(wantedData);
+    return searchHelper(root, temp);
 }
 
 template<class T>
-Node<T> *AVLtree<T>::searchHelper(Node<T> *node, T data)
+Node<T>* AVLtree<T>::searchHelper(Node<T>* node, T data)
 {
     if (node == nullptr || data == node->data)
     {
@@ -382,7 +388,7 @@ Node<T> *AVLtree<T>::searchHelper(Node<T> *node, T data)
 }
 
 template<class T>
-Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO///////////////////////////////////////////////
+Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data) 
 {
     if (node == nullptr)
     {
@@ -407,10 +413,10 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
             node = nullptr;
         }
 
-            //node has only one son
+        //node has only one son
         else if (node->left == nullptr)
         {
-            Node<T> *temp = node;
+            Node<T>* temp = node;
             node = node->right;
             node->parent = temp->parent;
             if (node->parent->right == temp)
@@ -425,7 +431,7 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
         }
         else if (node->right == nullptr)
         {
-            Node<T> *temp = node;
+            Node<T>* temp = node;
             node = node->left;
             node->parent = temp->parent;
             if (node->parent->right == temp)
@@ -439,10 +445,10 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
             delete temp;
         }
 
-            //node has two sons
+        //node has two sons
         else
         {
-            Node<T> *temp = minimumNode(node->right);
+            Node<T>* temp = minimumNode(node->right);
             node->data = temp->data;
             node->right = deleteNodeHelper(node->right, temp->data);
         }
@@ -454,9 +460,9 @@ Node<T> *AVLtree<T>::deleteNodeHelper(Node<T> *node, T data) //TO DO////////////
 }
 
 template<class T>
-Node<T> *AVLtree<T>::deleteNode(T data)
+Node<T>* AVLtree<T>::deleteNode(T data)
 {
-    Node<T> *deletedNode = deleteNodeHelper(root, data);
+    Node<T>* deletedNode = deleteNodeHelper(root, data);
     if (max_node->data == data)
     {
         max_node = maximumNode(root);
@@ -470,9 +476,9 @@ Node<T> *AVLtree<T>::deleteNode(T data)
 }
 
 template<class T>
-Node<T> *AVLtree<T>::minimumNode(Node<T> *node)
+Node<T>* AVLtree<T>::minimumNode(Node<T>* node)
 {
-    Node<T> *current = node;
+    Node<T>* current = node;
     while (current && current->left != nullptr)
     {
         current = current->left;
@@ -481,9 +487,9 @@ Node<T> *AVLtree<T>::minimumNode(Node<T> *node)
 }
 
 template<class T>
-Node<T> *AVLtree<T>::maximumNode(Node<T> *node)
+Node<T>* AVLtree<T>::maximumNode(Node<T>* node)
 {
-    Node<T> *current = node;
+    Node<T>* current = node;
     while (current && current->right != nullptr)
     {
         current = current->right;
@@ -492,7 +498,7 @@ Node<T> *AVLtree<T>::maximumNode(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::clearHelper(Node<T> *node)
+void AVLtree<T>::clearHelper(Node<T>* node)
 {
     if (node != NULL)
     {
@@ -516,7 +522,7 @@ int AVLtree<T>::max(int x, int y)
 }
 
 template<class T>
-int AVLtree<T>::getHeight(Node<T> *node)
+int AVLtree<T>::getHeight(Node<T>* node)
 {
     if (!node)
     {
@@ -527,13 +533,13 @@ int AVLtree<T>::getHeight(Node<T> *node)
 }
 
 template<class T>
-int AVLtree<T>::getBalanceFactor(Node<T> *node)
+int AVLtree<T>::getBalanceFactor(Node<T>* node)
 {
     return getHeight(node->left) - getHeight(node->right);
 }
 
 template<class T>
-void AVLtree<T>::preOrderHelper(Node<T> *node)
+void AVLtree<T>::preOrderHelper(Node<T>* node)
 {
     if (node == NULL)
     {
@@ -551,7 +557,7 @@ void AVLtree<T>::preOrder()
 }
 
 template<class T>
-void AVLtree<T>::updateBalance(Node<T> *node)
+void AVLtree<T>::updateBalance(Node<T>* node)
 {
     if (!node)
     {
@@ -568,25 +574,25 @@ void AVLtree<T>::updateBalance(Node<T> *node)
 }
 
 template<class T>
-void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
+void AVLtree<T>::rebalanceAfterDelete(Node<T>* node)
 {
     //LL
     if (node->balance_factor > 1 && node->left->balance_factor >= 0)
     {
         rightRotate(node);
     }
-        //LR
+    //LR
     else if (node->balance_factor > 1 && node->left->balance_factor < 0)
     {
         leftRotate(node->left);
         rightRotate(node);
     }
-        // Right Right Case
+    // Right Right Case
     else if (node->balance_factor < -1 && node->right->balance_factor <= 0)
     {
         leftRotate(node);
     }
-        // Right Left Case
+    // Right Left Case
     else if (node->balance_factor < -1 && node->right->balance_factor > 0)
     {
         rightRotate(node->right);
@@ -596,13 +602,13 @@ void AVLtree<T>::rebalanceAfterDelete(Node<T> *node)
 }
 
 template<class T>
-T *AVLtree<T>::GetData(Node<T> *node)
+T* AVLtree<T>::GetData(Node<T>* node)
 {
     return node->data;
 }
 
 template<class T>
-void AVLtree<T>::reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index)
+void AVLtree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* index)
 {
     if (node == NULL)
     {
@@ -622,7 +628,7 @@ void AVLtree<T>::reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *i
 }
 
 template<class T>
-void AVLtree<T>::searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index)
+void AVLtree<T>::searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* index)
 {
     if (maxIndex >= *index)
     {

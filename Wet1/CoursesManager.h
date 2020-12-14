@@ -18,10 +18,10 @@ public:
     CoursesManager() = default; //c'tor
     ~CoursesManager() = default;
     CoursesManager* Init();
-    void addCourse (int courseID, int numOfClasses);
-    void removeCourse (int CourseID);
-    void watchClass (int courseID, int classID, int time);
-    void timeViewed (int courseID, int classID, int *timeviewed);
-    void getMostViewedClasses(int numOfClasses, int *courses, int *classes);
+    void addCourse(int courseID, int numOfClasses);
+    void removeCourse(int CourseID);
+    void watchClass(int courseID, int classID, int time);
+    void timeViewed(int courseID, int classID, int* timeviewed);
+    void getMostViewedClasses(int numOfClasses, int* courses, int* classes);
 };
 #endif

@@ -1,5 +1,18 @@
 #include "Course.h"
 
+Course::Course(Course& course)
+{
+    course_id = course.course_id;
+    num_of_classes = course.num_of_classes;
+    this->classes = new Class[course.num_of_classes];
+
+    for (int i = 0; i < num_of_classes; i++)
+    {
+        Class temp(course.classes[i]);
+        classes[i] = Class(course.classes[i]);
+    }
+}
+
 Course::Course(int course_id, int num_of_classes)
 {
     this->course_id = course_id;
@@ -10,6 +23,21 @@ Course::Course(int course_id, int num_of_classes)
     {
         classes[i] = Class(i, course_id, 0);
     }
+}
+
+Course& Course::operator=(Course& other)
+{
+    course_id = other.course_id;
+    num_of_classes = other.num_of_classes;
+    this->classes = new Class[other.num_of_classes];
+
+    for (int i = 0; i < num_of_classes; i++)
+    {
+        Class temp(other.classes[i]);
+        classes[i] = Class(other.classes[i]);
+    }
+
+    return *this;
 }
 
 Course::~Course()
@@ -58,7 +86,7 @@ bool Course::operator>(const Course c) const
 
 bool Course::operator==(const Course c) const
 {
-    if(course_id == c.course_id)
+    if (course_id == c.course_id)
     {
         return true;
     }
