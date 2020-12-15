@@ -133,7 +133,7 @@ void CoursesManager::getMostViewedClasses(int numOfClasses, int* courses, int* c
         courses[i] = mostViewed[i].getCourseId();
         classes[i] = mostViewed[i].getClassId();
     }
-
+    delete[] mostViewed;
 }
 
 
