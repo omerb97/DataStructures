@@ -11,12 +11,12 @@ void inOrder(Node<Course>* node, Class* maxArray, int maxIndex, int* index)
     for (int i = 0; i < node->data.getNumOfClasses(); i++)
     {
         Class temp = node->data.getClass(i);
-        if (temp.getTime() == 0 && maxIndex >= *index)
+        if (temp.getTime() == 0 && maxIndex > *index)
         {
             maxArray[*index] = Class(temp);
             (*index)++;
         }
-        if (maxIndex < *index)
+        if (maxIndex <= *index)
         {
             return;
         }
@@ -30,12 +30,12 @@ void searchByMin(Node<Course>* node, Class* maxArray, int maxIndex, int* index)
     for (int i = 0; i < node->data.getNumOfClasses(); i++)
     {
         Class temp = node->data.getClass(i);
-        if (temp.getTime() == 0 && maxIndex >= *index)
+        if (temp.getTime() == 0 && maxIndex > *index)
         {
             maxArray[*index] = Class(temp);
             (*index)++;
         }
-        if (maxIndex < *index)
+        if (maxIndex <= *index)
         {
             return;
         }

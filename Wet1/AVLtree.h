@@ -42,6 +42,39 @@ Node<T>::~Node()
     }
 }
 
+//template<class T>
+//Node<T>::Node(const Node<T> &node)
+//{
+//    this->data = node.data;
+//    if(node.right)
+//    {
+//        this->right = new Node<T>(node.right);
+//    }
+//    else
+//    {
+//        this->right = nullptr;
+//    }
+//
+//    if(node.parent)
+//    {
+//        this->parent = new Node<T>(node.parent);
+//    }
+//    else
+//    {
+//        this->parent = nullptr;
+//    }
+//
+//    if(node.left)
+//    {
+//        this->left = new Node<T>(node.left);
+//    }
+//    else
+//    {
+//        this->left = nullptr;
+//    }
+//    this->balance_factor = node.balance_factor;
+//}
+
 template<class T>
 class AVLtree
 {
@@ -409,6 +442,7 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
         //node is a leaf
         if (node->left == nullptr && node->right == nullptr)
         {
+            //Node<T>* temp = node->parent;
             delete node;
             node = nullptr;
         }
@@ -462,14 +496,26 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
 template<class T>
 Node<T>* AVLtree<T>::deleteNode(T data)
 {
-    Node<T>* deletedNode = deleteNodeHelper(root, data);
-    if (max_node->data == data)
+    Node<T>* deletedNode;
+    if (max_node->data == data && !(min_node->data == data))
     {
+        deletedNode = deleteNodeHelper(root, data);
         max_node = maximumNode(root);
     }
-    if (min_node->data == data)
+    if (min_node->data == data && !(max_node->data == data))
     {
+        deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
+    }
+    if(min_node->data == data && max_node->data == data)
+    {
+        deletedNode = deleteNodeHelper(root, data);
+        min_node = minimumNode(root);
+        max_node = maximumNode(root);
+    }
+    if(!(max_node->data == data) && !(min_node->data == data))
+    {
+        deletedNode = deleteNodeHelper(root, data);
     }
 
     return deletedNode;
@@ -615,7 +661,7 @@ void AVLtree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* i
         return;
     }
     reverseInOrder(node->right, maxArray, maxIndex, index);
-    if (maxIndex >= *index)
+    if (maxIndex > *index)
     {
         maxArray[*index] = node->data;
         (*index)++;
@@ -630,7 +676,7 @@ void AVLtree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* i
 template<class T>
 void AVLtree<T>::searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* index)
 {
-    if (maxIndex >= *index)
+    if (maxIndex > *index)
     {
         maxArray[*index] = node->data;
         (*index)++;
