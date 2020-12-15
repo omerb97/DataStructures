@@ -120,7 +120,10 @@ void CoursesManager::getMostViewedClasses(int numOfClasses, int* courses, int* c
     int index = 0;
 
     Class* mostViewed = new Class[numOfClasses];
-    timeTree.searchByMax(timeTree.getMax(), mostViewed, numOfClasses, &index);
+    if (timeTree.getMax())
+    {
+        timeTree.searchByMax(timeTree.getMax(), mostViewed, numOfClasses, &index);
+    }
     if (numOfClasses > watchedClasses)
     {
         searchByMin(courseTree.getMin(), mostViewed, numOfClasses, &index);
