@@ -453,6 +453,8 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             Node<T>* temp = node;
             node = node->right;
             node->parent = temp->parent;
+            temp->right = nullptr;
+
             if (node->parent && node->parent->right == temp)
             {
                 node->parent->right = node;
@@ -460,6 +462,10 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             else if(node->parent)
             {
                 node->parent->left = node;
+            }
+            else if(temp->data == root->data)
+            {
+                root = node;
             }
 
             delete temp;
@@ -469,6 +475,8 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             Node<T>* temp = node;
             node = node->left;
             node->parent = temp->parent;
+            temp->left = nullptr;
+
             if (node->parent && node->parent->right == temp)
             {
                 node->parent->right = node;
@@ -476,6 +484,10 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             else if(node->parent)
             {
                 node->parent->left = node;
+            }
+            else if(temp->data == root->data)
+            {
+                root = node;
             }
 
             delete temp;
