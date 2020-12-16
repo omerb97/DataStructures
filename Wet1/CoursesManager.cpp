@@ -33,7 +33,8 @@ void CoursesManager::removeCourse(int CourseID)
     }
 
     Course searchCourse(CourseID, 1);
-    if (this->courseTree.search(searchCourse) == nullptr) {
+    if (this->courseTree.search(searchCourse) == nullptr)
+    {
         throw TreeValueNoExist();
     }
     auto wantedCourse = this->courseTree.search(searchCourse)->data;
@@ -47,7 +48,7 @@ void CoursesManager::removeCourse(int CourseID)
         }
     }
     totalClasses = totalClasses - wantedCourse.getNumOfClasses();
-    this->courseTree.deleteNode(searchCourse); //todo: does this free the data inside?
+    this->courseTree.deleteNode(wantedCourse); //todo: does this free the data inside?
 
 
 }

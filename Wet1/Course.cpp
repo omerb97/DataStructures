@@ -8,7 +8,6 @@ Course::Course(Course& course)
 
     for (int i = 0; i < num_of_classes; i++)
     {
-        Class temp(course.classes[i]);
         classes[i] = Class(course.classes[i]);
     }
 }

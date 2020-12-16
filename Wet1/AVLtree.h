@@ -461,6 +461,7 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             {
                 node->parent->left = node;
             }
+
             delete temp;
         }
         else if (node->right == nullptr)
@@ -476,6 +477,7 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
             {
                 node->parent->left = node;
             }
+
             delete temp;
         }
 
