@@ -442,7 +442,18 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
         //node is a leaf
         if (node->left == nullptr && node->right == nullptr)
         {
-            //Node<T>* temp = node->parent;
+            if (node->parent && node->parent->right->data == node->data)
+            {
+                node->parent->right = nullptr;
+            }
+            else if(node->parent && node->parent->left->data == node->data)
+            {
+                node->parent->left = nullptr;
+            }
+            else if(!node->parent)
+            {
+                root = nullptr;
+            }
             delete node;
             node = nullptr;
         }
