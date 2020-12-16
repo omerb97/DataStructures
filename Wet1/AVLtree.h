@@ -516,18 +516,18 @@ Node<T>* AVLtree<T>::deleteNode(T data)
         deletedNode = deleteNodeHelper(root, data);
         max_node = maximumNode(root);
     }
-    if (min_node->data == data && !(max_node->data == data))
+    else if (min_node->data == data && !(max_node->data == data))
     {
         deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
     }
-    if(min_node->data == data && max_node->data == data)
+    else if(min_node->data == data && max_node->data == data)
     {
         deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
         max_node = maximumNode(root);
     }
-    if(!(max_node->data == data) && !(min_node->data == data))
+    else if(!(max_node->data == data) && !(min_node->data == data))
     {
         deletedNode = deleteNodeHelper(root, data);
     }
@@ -670,7 +670,7 @@ T* AVLtree<T>::GetData(Node<T>* node)
 template<class T>
 void AVLtree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* index)
 {
-    if (node == NULL)
+    if (node == NULL || maxIndex <= *index)
     {
         return;
     }
