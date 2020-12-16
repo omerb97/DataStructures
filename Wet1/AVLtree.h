@@ -548,8 +548,8 @@ void AVLtree<T>::clearHelper(Node<T>* node)
 {
     if (node != NULL)
     {
-        clearHelper(node->left);   // Recursively clear the left sub-tree
-        clearHelper(node->right);   // Recursively clear the right sub-tree
+        //clearHelper(node->left);   // Recursively clear the left sub-tree
+        //clearHelper(node->right);   // Recursively clear the right sub-tree
         delete node;         // Delete this node
     }
 }

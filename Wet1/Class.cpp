@@ -39,15 +39,15 @@ bool Class::operator<(const Class c) const
     {
         return false;
     }
-    else if (course_id < c.course_id)
+    else if (course_id > c.course_id)
     {
         return true;
     }
-    else if (course_id > c.course_id)
+    else if (course_id < c.course_id)
     {
         return false;
     }
-    else if (class_id < c.class_id)
+    else if (class_id > c.class_id)
     {
         return true;
     }
@@ -67,15 +67,15 @@ bool Class::operator>(const Class c) const
     {
         return false;
     }
-    else if (course_id > c.course_id)
+    else if (course_id < c.course_id)
     {
         return true;
     }
-    else if (course_id < c.course_id)
+    else if (course_id > c.course_id)
     {
         return false;
     }
-    else if (class_id > c.class_id)
+    else if (class_id < c.class_id)
     {
         return true;
     }
