@@ -449,8 +449,7 @@ Node<T>* AVLtree<T>::searchHelper(Node<T>* node, T data)
 }
 
 template<class T>
-Node<T>* AVLtree<T>::
-        deleteNodeHelper(Node<T>* node, T data)
+Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
 {
     if (node == nullptr)
     {
