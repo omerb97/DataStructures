@@ -421,7 +421,8 @@ Node<T>* AVLtree<T>::searchHelper(Node<T>* node, T data)
 }
 
 template<class T>
-Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data) 
+Node<T>* AVLtree<T>::
+        deleteNodeHelper(Node<T>* node, T data)
 {
     if (node == nullptr)
     {
@@ -442,11 +443,11 @@ Node<T>* AVLtree<T>::deleteNodeHelper(Node<T>* node, T data)
         //node is a leaf
         if (node->left == nullptr && node->right == nullptr)
         {
-            if (node->parent && node->parent->right->data == node->data)
+            if (node->parent && node->parent->right && node->parent->right->data == node->data)
             {
                 node->parent->right = nullptr;
             }
-            else if(node->parent && node->parent->left->data == node->data)
+            else if(node->parent && node->parent->left && node->parent->left->data == node->data)
             {
                 node->parent->left = nullptr;
             }
@@ -541,6 +542,8 @@ Node<T>* AVLtree<T>::deleteNode(T data)
     else if(!(max_node->data == data) && !(min_node->data == data))
     {
         deletedNode = deleteNodeHelper(root, data);
+        min_node = minimumNode(root);
+        max_node = maximumNode(root);
     }
 
     return deletedNode;
