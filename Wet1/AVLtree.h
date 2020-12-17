@@ -399,8 +399,8 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
             }
             else
             {
-                rightRotate(node->left);
-                leftRotate(node);
+                leftRotate(node->left);
+                rightRotate(node);
             }
     }
     else if (node->balance_factor < 0)
@@ -420,8 +420,8 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
         }
         else
         {
-            leftRotate(node->right);
-            rightRotate(node);
+            rightRotate(node->right);
+            leftRotate(node);
         }
     }
 }
