@@ -183,12 +183,12 @@ void AVLtree<T>::balanceTree(Node<T>* node)
     {
         if (node == node->parent->left)
         {
-            node->parent->balance_factor -= 1;
+            node->parent->balance_factor += 1;
         }
 
         if (node == node->parent->right)
         {
-            node->parent->balance_factor += 1;
+            node->parent->balance_factor -= 1;
         }
 
         if (node->parent->balance_factor != 0)
@@ -315,22 +315,22 @@ void AVLtree<T>::leftRotate(Node<T>* node)
     node->parent = temp;
 
     // update the balance factor
-    if (temp && temp->balance_factor > 0)
+    if (temp && temp->balance_factor < 0)
     {
-        node->balance_factor = node->balance_factor - 1 - temp->balance_factor;
+        node->balance_factor = node->balance_factor + 1 - temp->balance_factor;
     }
     else
     {
-        node->balance_factor = node->balance_factor - 1;
+        node->balance_factor = node->balance_factor + 1;
     }
 
-    if (node->balance_factor < 0)
+    if (node->balance_factor > 0)
     {
-        temp->balance_factor = temp->balance_factor - 1 + node->balance_factor;
+        temp->balance_factor = temp->balance_factor + 1 + node->balance_factor;
     }
     else
     {
-        temp->balance_factor = temp->balance_factor - 1;
+        temp->balance_factor = temp->balance_factor + 1;
     }
 }
 
@@ -361,22 +361,22 @@ void AVLtree<T>::rightRotate(Node<T>* node)
     node->parent = temp;
 
     // update the balance factor
-    if (temp->balance_factor < 0)
+    if (temp->balance_factor > 0)
     {
-        node->balance_factor = node->balance_factor + 1 - temp->balance_factor;
+        node->balance_factor = node->balance_factor - 1 - temp->balance_factor;
     }
     else
     {
-        node->balance_factor = node->balance_factor + 1;
+        node->balance_factor = node->balance_factor - 1;
     }
 
-    if (node->balance_factor > 0)
+    if (node->balance_factor < 0)
     {
-        temp->balance_factor = temp->balance_factor + 1 + node->balance_factor;
+        temp->balance_factor = temp->balance_factor - 1 + node->balance_factor;
     }
     else
     {
-        temp->balance_factor = temp->balance_factor + 1;
+        temp->balance_factor = temp->balance_factor - 1;
     }
 }
 
@@ -385,45 +385,45 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
 {
     if (node->balance_factor > 0)
     {
-        if (node->right && node->right->balance_factor < 0)
-        {
-            rightRotate(node->right);
-            leftRotate(node);
-        }
-        else
-        {
-            leftRotate(node);
-        }
-//            if(node->left->balance_factor >= 0)
-//            {
-//                leftRotate(node);
-//            }
-//            else
-//            {
-//                leftRotate(node->left);
-//                rightRotate(node);
-//            }
-    }
-    else if (node->balance_factor < 0)
-    {
-        if (node->left && node->left->balance_factor > 0)
-        {
-            leftRotate(node->left);
-            rightRotate(node);
-        }
-        else
-        {
-            rightRotate(node);
-        }
-//        if(node->right->balance_factor <= 0)
-//        {
-//            rightRotate(node);
-//        }
-//        else
+//        if (node->right && node->right->balance_factor < 0)
 //        {
 //            rightRotate(node->right);
 //            leftRotate(node);
 //        }
+//        else
+//        {
+//            leftRotate(node);
+//        }
+            if(node->left->balance_factor >= 0)
+            {
+                rightRotate(node);
+            }
+            else
+            {
+                rightRotate(node->left);
+                leftRotate(node);
+            }
+    }
+    else if (node->balance_factor < 0)
+    {
+//        if (node->left && node->left->balance_factor > 0)
+//        {
+//            leftRotate(node->left);
+//            rightRotate(node);
+//        }
+//        else
+//        {
+//            rightRotate(node);
+//        }
+        if(node->right->balance_factor <= 0)
+        {
+            leftRotate(node);
+        }
+        else
+        {
+            leftRotate(node->right);
+            rightRotate(node);
+        }
     }
 }
 
