@@ -28,6 +28,12 @@ Course& Course::operator=(Course& other)
 {
     course_id = other.course_id;
     num_of_classes = other.num_of_classes;
+
+    if(this)
+    {
+        delete[] classes;
+    }
+
     this->classes = new Class[other.num_of_classes];
 
     for (int i = 0; i < num_of_classes; i++)

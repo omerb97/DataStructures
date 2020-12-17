@@ -19,9 +19,8 @@ struct Node
 };
 
 template<class T>
-Node<T>::Node(T data, Node* left, Node* right, Node* parent, int balance_factor)
+Node<T>::Node(T data, Node* left, Node* right, Node* parent, int balance_factor) : data(data)
 {
-    this->data = data;
     this->left = left;
     this->right = right;
     this->parent = parent;

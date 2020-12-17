@@ -55,16 +55,16 @@ void CoursesManager::removeCourse(int CourseID)
 
 void CoursesManager::watchClass(int courseID, int classID, int time)
 {
-    if (courseID <= 0 || classID <= 0 || time <= 0) {
+    if (courseID <= 0 || classID < 0 || time <= 0) {
         throw InvalidInputs();
     }
     Course searchCourse(courseID, 1);
     Course* wantedCourse = (&((this->courseTree.search(searchCourse))->data));
 
-    if (this->courseTree.search(*wantedCourse) == nullptr) {
+    if (wantedCourse == nullptr) {
         throw TreeValueNoExist();
     }
-    if (classID > wantedCourse->getNumOfClasses()) {
+    if ((classID + 1) > wantedCourse->getNumOfClasses()) {
         throw InvalidInputs();
     }
 
@@ -85,7 +85,7 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
 
 void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
 {
-    if (courseID <= 0 || classID <= 0) {
+    if (courseID <= 0 || classID < 0) {
         throw InvalidInputs();
     }
 
@@ -97,7 +97,7 @@ void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
     }
     Course wantedCourse = this->courseTree.search(searchCourse)->data;
 
-    if (classID > wantedCourse.getNumOfClasses())
+    if ((classID + 1) > wantedCourse.getNumOfClasses())
     {
         throw InvalidInputs();
     }
