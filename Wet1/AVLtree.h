@@ -282,29 +282,40 @@ template<class T>
 void AVLtree<T>::leftRotate(Node<T>* node)
 {
     Node<T>* temp = node->right;
-    node->right = temp->left;
-    if (temp->left != nullptr)
+    if(temp)
+    {
+        node->right = temp->left;
+    }
+
+    if (temp && temp->left != nullptr)
     {
         temp->left->parent = node;
     }
-    temp->parent = node->parent;
-    if (node->parent == nullptr)
+    if(temp)
+    {
+        temp->parent = node->parent;
+    }
+    if (node && node->parent == nullptr)
     {
         this->root = temp;
     }
-    else if (node == node->parent->left)
+    else if (node->parent && node == node->parent->left)
     {
         node->parent->left = temp;
     }
-    else
+    else if(node->parent)
     {
         node->parent->right = temp;
     }
-    temp->left = node;
+    if(temp)
+    {
+        temp->left = node;
+    }
+
     node->parent = temp;
 
     // update the balance factor
-    if (temp->balance_factor > 0)
+    if (temp && temp->balance_factor > 0)
     {
         node->balance_factor = node->balance_factor - 1 - temp->balance_factor;
     }
@@ -374,7 +385,7 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
 {
     if (node->balance_factor > 0)
     {
-        if (node->right->balance_factor < 0)
+        if (node->right && node->right->balance_factor < 0)
         {
             rightRotate(node->right);
             leftRotate(node);
@@ -383,10 +394,19 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
         {
             leftRotate(node);
         }
+//            if(node->left->balance_factor >= 0)
+//            {
+//                leftRotate(node);
+//            }
+//            else
+//            {
+//                leftRotate(node->left);
+//                rightRotate(node);
+//            }
     }
     else if (node->balance_factor < 0)
     {
-        if (node->left->balance_factor > 0)
+        if (node->left && node->left->balance_factor > 0)
         {
             leftRotate(node->left);
             rightRotate(node);
@@ -395,6 +415,15 @@ void AVLtree<T>::rebalanceAfterInsert(Node<T>* node)
         {
             rightRotate(node);
         }
+//        if(node->right->balance_factor <= 0)
+//        {
+//            rightRotate(node);
+//        }
+//        else
+//        {
+//            rightRotate(node->right);
+//            leftRotate(node);
+//        }
     }
 }
 
