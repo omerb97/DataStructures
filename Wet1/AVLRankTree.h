@@ -86,7 +86,7 @@ private:
 
 public:
     AVLRankTree(); //c'tor
-    AVLRankTree(const AVLtree& node); //copy c'tor
+    AVLRankTree(const AVLRankTree& node); //copy c'tor
     ~AVLRankTree(); //d'tor
 
     void insert(T insertData);
@@ -122,7 +122,7 @@ AVLRankTree<T>::AVLRankTree()
 
 
 template<class T>
-AVLRankTree<T>::AVLRankTree(const AVLtree& node) : root(node.root)
+AVLRankTree<T>::AVLRankTree(const AVLRankTree& node) : root(node.root)
 {
 
 }
