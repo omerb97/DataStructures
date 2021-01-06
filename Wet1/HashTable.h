@@ -65,7 +65,7 @@ void HashTable<T>::CheckandReorganize()
         List<T> newTable[this->arraySize];
         for (int i= 0; i < oldSize; i++)
         {
-            ListNode<T> temp = this->table[i].GetHead();
+            ListNode<T> temp = *this->table[i].GetHead();
             while (table[i] != nullptr)
             {
                 int newHash = HashFunction(temp.GetData().GetHash());//todo: add a get hash function to class and course

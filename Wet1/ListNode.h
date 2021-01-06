@@ -14,7 +14,7 @@ public:
     ListNode& operator=(ListNode<T> const& other);
     T GetData();
     ListNode* GetNext();
-    void SetNext(const ListNode* nextNode);
+    void SetNext(ListNode<T>* nextNode);
     void SetData(T data);
 
 };
@@ -47,7 +47,7 @@ void ListNode<T>::SetData(T data)
 }
 
 template<class T>
-void ListNode<T>::SetNext(const ListNode* nextNode)
+void ListNode<T>::SetNext(ListNode<T>* nextNode)
 {
     this->next = nextNode;
 }

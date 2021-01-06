@@ -34,6 +34,8 @@ public:
     bool operator>(const Course c) const;
 
     bool operator==(const Course c) const;
+
+    int GetHash();
 };
 
 #endif

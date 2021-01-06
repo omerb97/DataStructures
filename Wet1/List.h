@@ -46,9 +46,9 @@ void List<T>::Insert(T data)
     ListNode<T> temp = *this->head;
     while (temp.GetNext())
     {
-        temp = temp.GetNext();
+        temp = *(temp.GetNext());
     }
-    temp.SetNext(newNode);
+    temp.SetNext(&newNode);
     this->length++;
 }
 

@@ -102,3 +102,8 @@ void Course::addTime(int class_id, int time)
 {
     classes[class_id].addTime(time);
 }
+
+int Course::GetHash()
+{
+    return course_id;
+}
