@@ -43,12 +43,11 @@ HashTable<T>::~HashTable()
 
     delete[] table;
 }
-//todo dont really know what to do with all the ctor dto etc...
 
 template <class T>
 int HashTable<T>::HashFunction(int input)
 {
-    return (input%this->arraySize);
+    return (input % this->arraySize);
 }
 
 template <class T>
@@ -96,6 +95,7 @@ void HashTable<T>::Remove(T data)
     int hashNum = hashFuncInput%this->arraySize;
     List<T> temp = this->table[hashNum];
     temp.Remove(data);
+    this->filledNum--;
 }
 
 template <class T>

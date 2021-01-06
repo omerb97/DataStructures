@@ -97,3 +97,8 @@ Class::Class(Class const& c)
     this->course_id = c.course_id;
 }
 
+int Class::GetHash()
+{
+    return this->class_id;
+}
+

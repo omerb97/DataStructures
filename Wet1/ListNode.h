@@ -5,7 +5,7 @@ template <class T>
 class ListNode
 {
 private:
-    T* Data;
+    T Data;
     ListNode* next;
 public:
     ListNode() = default; //c'tor
