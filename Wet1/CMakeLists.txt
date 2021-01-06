@@ -3,4 +3,4 @@ project(Wet1)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Wet1 main.cpp library2.h ListNode.h List.h HashTable.h)
+add_executable(Wet1 main.cpp library2.h ListNode.h List.h HashTable.h Class.h Class.cpp Course.h Course.cpp)

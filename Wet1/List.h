@@ -10,17 +10,20 @@ private:
     ListNode<T>* head;
     int length;
 
-    ListNode* SearchForFather(T data)
 public:
     explicit List();
-    ~List();
-    List(const List<T>& list);
-    ListNode* GetHead();
+    ~List() = default;
+    ListNode<T>* GetHead();
     int GetLength();
     void Insert(T data);
     void Remove(T data);
-    ListNode* Search(T data)
+    ListNode<T>* Search(T data);
 };
+
+template<class T>
+List<T>::List() : head(nullptr), length(0){}
+
+
 
 //todo: dont really know what to do with all the ctor dto etc...
 
@@ -39,7 +42,7 @@ int List<T>::GetLength()
 template<class T>
 void List<T>::Insert(T data)
 {
-    ListNode<T> newNode = ListNode(data, nullptr);
+    ListNode<T> newNode = ListNode<T>(data, nullptr);
     ListNode<T> temp = *this->head;
     while (temp.GetNext())
     {
@@ -49,28 +52,6 @@ void List<T>::Insert(T data)
     this->length++;
 }
 
-template<class T>
-ListNode<T>* List<T>::SearchForFather(T data)
-{
-    if (Search(data) == NULL)
-    {
-        return NULL;
-    }
-    ListNode<T> temp = *this->head;
-    while (temp.GetNext()->GetData() != data && temp != nullptr)
-    {
-        temp = temp.GetNext();
-    }
-    temp = nullptr;
-    if (temp == nullptr)
-    {
-        return NULL;
-    }
-    else
-    {
-        return temp;
-    }
-}
 
 template<class T>
 ListNode<T>* List<T>::Search(T data)
@@ -129,4 +110,7 @@ void List<T>::Remove(T data)
     }
     this->length--;
 }
+
+
+
 #endif

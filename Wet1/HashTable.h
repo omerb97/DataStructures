@@ -11,21 +11,38 @@ template <class T>
 class HashTable
 {
 private:
-    List<T> table[];
+    List<T>* table; //todo maybe it needs to be an array if pointers to lists and not an array of lists
     int arraySize;
     int filledNum;
 
     int HashFunction(int input);
     void CheckandReorganize();
 public:
-    explicit HashTable();
+    explicit HashTable(int starting_size_ = STARTING_SIZE);
     ~HashTable();
-    HashTable(const HashTable<T>& hash);
     void Insert (T data);
     void Remove (T data);
     ListNode<T>* Search (T data);
 };
 
+
+template<class T>
+HashTable<T>::HashTable(int starting_size_) : arraySize(starting_size_), filledNum(0)
+{
+    table = new List<T>[arraySize];
+}
+
+
+template<class T>
+HashTable<T>::~HashTable()
+{
+//    for (int i = 0; i < arraySize; i++)
+//    {
+//        delete table[i];
+//    }
+
+    delete[] table;
+}
 //todo dont really know what to do with all the ctor dto etc...
 
 template <class T>
@@ -46,14 +63,14 @@ void HashTable<T>::CheckandReorganize()
         int oldSize = this->arraySize;
         this->arraySize = this->arraySize*2;
         List<T> newTable[this->arraySize];
-        for (int = 0; i < oldSize; i++)
+        for (int i= 0; i < oldSize; i++)
         {
             ListNode<T> temp = this->table[i].GetHead();
             while (table[i] != nullptr)
             {
                 int newHash = HashFunction(temp.GetData().GetHash());//todo: add a get hash function to class and course
                 T newData = temp.GetData();
-                new newTable[i].Insert(newData);
+                newTable[i].Insert(newData);
             }
         }
         delete[] this->table;
@@ -64,7 +81,7 @@ void HashTable<T>::CheckandReorganize()
 template <class T>
 void HashTable<T>::Insert(T data)
 {
-    int hashFuncInput = data.GetHash();
+    int hashFuncInput = data.GetHash(); //todo: make getHash function for course and class
     int hashNum = hashFuncInput%this->arraySize;
     List<T> temp = this->table[hashNum];
     temp.Insert(data);
@@ -90,5 +107,7 @@ ListNode<T>* HashTable<T>::Search(T data)
     ListNode<T> wantedNode = temp.Search(data);
     return wantedNode;
 }
+
+
 
 #endif

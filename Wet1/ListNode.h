@@ -8,15 +8,23 @@ private:
     T* Data;
     ListNode* next;
 public:
-    explicit ListNode(T data, ListNode *next); //c'tor
-    ~ListNode();
-    ListNode(const ListNode<T>& node);
+    ListNode() = default; //c'tor
+    ListNode(T data, ListNode<T> *next); //c'tor
+    ~ListNode() = default;
+    ListNode& operator=(ListNode<T> const& other);
     T GetData();
     ListNode* GetNext();
     void SetNext(const ListNode* nextNode);
-    void SetData(const T data);
+    void SetData(T data);
 
 };
+
+template<class T>
+ListNode<T>::ListNode(T data, ListNode<T> *next)
+{
+    this->Data = data;
+    this->next = next;
+}
 
 //todo: dont really know what to do with all the cto dtor etc...
 
@@ -33,7 +41,7 @@ ListNode<T>* ListNode<T>::GetNext()
 }
 
 template<class T>
-void ListNode<T>::SetData(const T data)
+void ListNode<T>::SetData(T data)
 {
     this->Data = data;
 }
@@ -43,4 +51,13 @@ void ListNode<T>::SetNext(const ListNode* nextNode)
 {
     this->next = nextNode;
 }
+
+template<class T>
+ListNode<T>& ListNode<T>::operator=(ListNode<T>const& other)
+{
+    this->Data = other.Data;
+    this->next = other.next;
+}
+
+
 #endif
