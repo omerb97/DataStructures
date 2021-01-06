@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+ 
 /* The command's strings */
 typedef enum {
     NONE_CMD = -2,
