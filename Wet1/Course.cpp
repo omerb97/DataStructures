@@ -1,6 +1,6 @@
 #include "Course.h"
 
-Course::Course(Course& course)
+Course::Course(const Course& course)
 {
     course_id = course.course_id;
     num_of_classes = course.num_of_classes;

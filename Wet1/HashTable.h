@@ -64,12 +64,13 @@ void HashTable<T>::CheckandReorganize()
         List<T> newTable[this->arraySize];
         for (int i= 0; i < oldSize; i++)
         {
-            ListNode<T> temp = *this->table[i].GetHead();
-            while (table[i] != nullptr)
+            ListNode<T> *temp = this->table[i].GetHead();
+            while (temp)
             {
-                int newHash = HashFunction(temp.GetData().GetHash());//todo: add a get hash function to class and course
-                T newData = temp.GetData();
-                newTable[i].Insert(newData);
+                int newHash = HashFunction(temp->GetData().GetHash());//todo: add a get hash function to class and course
+                T newData (temp->GetData());
+                newTable[newHash].Insert(newData);
+                temp = temp->GetNext();
             }
         }
         delete[] this->table;
@@ -92,7 +93,7 @@ template <class T>
 void HashTable<T>::Remove(T data)
 {
     int hashFuncInput = data.GetHash();
-    int hashNum = hashFuncInput%this->arraySize;
+    int hashNum = HashFunction(hashFuncInput);
     List<T> temp = this->table[hashNum];
     temp.Remove(data);
     this->filledNum--;
@@ -102,7 +103,7 @@ template <class T>
 ListNode<T>* HashTable<T>::Search(T data)
 {
     int hashFuncInput = data.GetHash();
-    int hashNum = hashFuncInput%this->arraySize;
+    int hashNum =  HashFunction(hashFuncInput);
     List<T> temp = this->table[hashNum];
     ListNode<T> wantedNode = temp.Search(data);
     return wantedNode;

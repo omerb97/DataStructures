@@ -15,6 +15,7 @@ public:
     T GetData();
     ListNode* GetNext();
     void SetNext(ListNode<T>* nextNode);
+
     void SetData(T data);
 
 };

@@ -42,14 +42,23 @@ int List<T>::GetLength()
 template<class T>
 void List<T>::Insert(T data)
 {
-    ListNode<T> newNode = ListNode<T>(data, nullptr);
-    ListNode<T> temp = *this->head;
-    while (temp.GetNext())
+    ListNode<T> *newNode = new ListNode<T>(data, nullptr);
+    ListNode<T>* temp = this->head;
+    if (temp == nullptr)
     {
-        temp = *(temp.GetNext());
+        this->head = newNode;
+        this->length++;
     }
-    temp.SetNext(&newNode);
-    this->length++;
+    else
+    {
+        while (temp->GetNext())
+        {
+            temp = temp->GetNext();
+        }
+        temp->SetNext(newNode);
+        this->length++;
+    }
+
 }
 
 
@@ -85,12 +94,12 @@ void List<T>::Remove(T data)
         if(this->head->GetNext())
         {
             ListNode<T> newHead = this->head->GetNext();
-            this.head = newHead;
+            this->head = newHead;
             delete deleteNode;
         }
         else
         {
-            this.head = nullptr;
+            this->head = nullptr;
             delete deleteNode;
         }
     }

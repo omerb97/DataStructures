@@ -13,7 +13,7 @@ private:
 public:
     Course() = default;
 
-    Course(Course& course);
+    Course(const Course& course);
 
     Course(int course_id, int num_of_classes);
 
