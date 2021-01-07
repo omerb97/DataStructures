@@ -21,8 +21,8 @@ public:
     explicit HashTable(int starting_size_ = STARTING_SIZE);
     ~HashTable();
     void Insert (T data);
-    void Remove (T data);
-    ListNode<T>* Search (T data);
+    void Remove (T* data);
+    ListNode<T>* Search (T* data);
 };
 
 
@@ -82,7 +82,7 @@ template <class T>
 void HashTable<T>::Insert(T data)
 {
     int hashFuncInput = data.GetHash(); //todo: make getHash function for course and class
-    int hashNum = hashFuncInput%this->arraySize;
+    int hashNum = HashFunction(hashFuncInput);
     List<T> temp = this->table[hashNum];
     temp.Insert(data);
     this->filledNum++;
@@ -90,9 +90,9 @@ void HashTable<T>::Insert(T data)
 }
 
 template <class T>
-void HashTable<T>::Remove(T data)
+void HashTable<T>::Remove(T* data)
 {
-    int hashFuncInput = data.GetHash();
+    int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
     List<T> temp = this->table[hashNum];
     temp.Remove(data);
@@ -100,7 +100,7 @@ void HashTable<T>::Remove(T data)
 }
 
 template <class T>
-ListNode<T>* HashTable<T>::Search(T data)
+ListNode<T>* HashTable<T>::Search(T* data)
 {
     int hashFuncInput = data.GetHash();
     int hashNum =  HashFunction(hashFuncInput);

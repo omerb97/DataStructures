@@ -5,14 +5,14 @@ template <class T>
 class ListNode
 {
 private:
-    T Data;
+    T* Data;
     ListNode* next;
 public:
     ListNode() = default; //c'tor
-    ListNode(T data, ListNode<T> *next); //c'tor
+    ListNode(T* data, ListNode<T> *next); //c'tor
     ~ListNode() = default;
     ListNode& operator=(ListNode<T> const& other);
-    T GetData();
+    T* GetData();
     ListNode* GetNext();
     void SetNext(ListNode<T>* nextNode);
 
@@ -21,7 +21,7 @@ public:
 };
 
 template<class T>
-ListNode<T>::ListNode(T data, ListNode<T> *next)
+ListNode<T>::ListNode(T* data, ListNode<T> *next)
 {
     this->Data = data;
     this->next = next;
@@ -30,7 +30,7 @@ ListNode<T>::ListNode(T data, ListNode<T> *next)
 //todo: dont really know what to do with all the cto dtor etc...
 
 template<class T>
-T ListNode<T>::GetData()
+T* ListNode<T>::GetData()
 {
     return this->Data;
 }

@@ -15,9 +15,9 @@ public:
     ~List() = default;
     ListNode<T>* GetHead();
     int GetLength();
-    void Insert(T data);
-    void Remove(T data);
-    ListNode<T>* Search(T data);
+    void Insert(T* data);
+    void Remove(T* data);
+    ListNode<T>* Search(T* data);
 };
 
 template<class T>
@@ -40,7 +40,7 @@ int List<T>::GetLength()
 }
 
 template<class T>
-void List<T>::Insert(T data)
+void List<T>::Insert(T* data)
 {
     ListNode<T> *newNode = new ListNode<T>(data, nullptr);
     ListNode<T>* temp = this->head;
@@ -63,7 +63,7 @@ void List<T>::Insert(T data)
 
 
 template<class T>
-ListNode<T>* List<T>::Search(T data)
+ListNode<T>* List<T>::Search(T* data)
 {
     ListNode<T> temp = *this->head;
     while (temp.GetData() != data && temp != nullptr)
@@ -82,7 +82,7 @@ ListNode<T>* List<T>::Search(T data)
 }
 
 template<class T>
-void List<T>::Remove(T data)
+void List<T>::Remove(T* data)
 {
     if (Search(data) == NULL)
     {
