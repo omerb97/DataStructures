@@ -16,7 +16,7 @@ Course::Course(const Course& course)
 Course::Course(int course_id)
 {
     this->course_id = course_id;
-    this->num_of_classes = num_of_classes;
+    this->num_of_classes = 0;
     this->classes = HashTable<Class>();
 }
 

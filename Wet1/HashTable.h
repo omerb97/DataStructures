@@ -99,8 +99,8 @@ void HashTable<T>::Remove(T* data)
 {
     int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
-    List<T> temp = *this->table[hashNum];
-    temp.Remove(data);
+    List<T>* temp = this->table[hashNum];
+    temp->Remove(data);
     this->filledNum--;
 }
 
