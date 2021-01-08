@@ -4,42 +4,47 @@
 #include "ListNode.h"
 #include "List.h"
 
-#define STARTING_SIZE 500
+#define STARTING_SIZE 10
 #define FILL_RATIO 3
 
 template <class T>
 class HashTable
 {
 private:
-    List<T>* table; //todo maybe it needs to be an array if pointers to lists and not an array of lists
+    List<T>** table;
     int arraySize;
     int filledNum;
 
     int HashFunction(int input);
     void CheckandReorganize();
 public:
-    explicit HashTable(int starting_size_ = STARTING_SIZE);
+    explicit HashTable(int starting_size = STARTING_SIZE);
     ~HashTable();
-    void Insert (T data);
+    void Insert (T* data);
     void Remove (T* data);
     ListNode<T>* Search (T* data);
 };
 
 
 template<class T>
-HashTable<T>::HashTable(int starting_size_) : arraySize(starting_size_), filledNum(0)
+HashTable<T>::HashTable(int starting_size) : arraySize(starting_size), filledNum(0)
 {
-    table = new List<T>[arraySize];
+    table = new List<T>*[arraySize];
+
+    for (int i=0; i< arraySize; i++)
+    {
+        table[i]= new List<T>();
+    }
 }
 
 
 template<class T>
 HashTable<T>::~HashTable()
 {
-//    for (int i = 0; i < arraySize; i++)
-//    {
-//        delete table[i];
-//    }
+    for (int i = 0; i < arraySize; i++)
+    {
+        delete table[i];
+    }
 
     delete[] table;
 }
@@ -61,15 +66,15 @@ void HashTable<T>::CheckandReorganize()
     {
         int oldSize = this->arraySize;
         this->arraySize = this->arraySize*2;
-        List<T> newTable[this->arraySize];
+        List<T>* newTable[this->arraySize];
         for (int i= 0; i < oldSize; i++)
         {
-            ListNode<T> *temp = this->table[i].GetHead();
+            ListNode<T> *temp = this->table[i]->GetHead();
             while (temp)
             {
-                int newHash = HashFunction(temp->GetData().GetHash());//todo: add a get hash function to class and course
-                T newData (temp->GetData());
-                newTable[newHash].Insert(newData);
+                int newHash = HashFunction(temp->GetData()->GetHash());//todo: add a get hash function to class and course
+                T* newData (temp->GetData());
+                newTable[newHash]->Insert(newData);
                 temp = temp->GetNext();
             }
         }
@@ -79,12 +84,12 @@ void HashTable<T>::CheckandReorganize()
 }
 
 template <class T>
-void HashTable<T>::Insert(T data)
+void HashTable<T>::Insert(T* data)
 {
-    int hashFuncInput = data.GetHash(); //todo: make getHash function for course and class
+    int hashFuncInput = data->GetHash(); //todo: make getHash function for course and class
     int hashNum = HashFunction(hashFuncInput);
-    List<T> temp = this->table[hashNum];
-    temp.Insert(data);
+    List<T>* temp = this->table[hashNum];
+    temp->Insert(data);
     this->filledNum++;
     CheckandReorganize();
 }
@@ -102,7 +107,7 @@ void HashTable<T>::Remove(T* data)
 template <class T>
 ListNode<T>* HashTable<T>::Search(T* data)
 {
-    int hashFuncInput = data.GetHash();
+    int hashFuncInput = data->GetHash();
     int hashNum =  HashFunction(hashFuncInput);
     List<T> temp = this->table[hashNum];
     ListNode<T> wantedNode = temp.Search(data);
