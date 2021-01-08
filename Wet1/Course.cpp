@@ -4,11 +4,12 @@ Course::Course(const Course& course)
 {
     course_id = course.course_id;
     num_of_classes = course.num_of_classes;
-    this->classes = new Class[course.num_of_classes];
+    this->classes = HashTable<Class>();
 
     for (int i = 0; i < num_of_classes; i++)
     {
-        classes[i] = Class(course.classes[i]);
+        Class temp = Class(i, course_id, 0);
+        classes.Insert(course.classes.Search(temp)->GetData());
     }
 }
 
@@ -16,12 +17,7 @@ Course::Course(int course_id, int num_of_classes)
 {
     this->course_id = course_id;
     this->num_of_classes = num_of_classes;
-    this->classes = new Class[num_of_classes];
-
-    for (int i = 0; i < num_of_classes; i++)
-    {
-        classes[i] = Class(i, course_id, 0);
-    }
+    this->classes = HashTable<Class>();
 }
 
 Course& Course::operator=(Course& other)
@@ -31,15 +27,15 @@ Course& Course::operator=(Course& other)
 
     if(this)
     {
-        delete[] classes;
+        classes.~HashTable();
     }
 
-    this->classes = new Class[other.num_of_classes];
+    this->classes = HashTable<Class>();
 
     for (int i = 0; i < num_of_classes; i++)
     {
-        Class temp(other.classes[i]);
-        classes[i] = Class(other.classes[i]);
+        Class temp = Class(i, course_id, 0);
+        classes.Insert(*(other.classes.Search(&temp)->GetData()));
     }
 
     return *this;
@@ -47,12 +43,12 @@ Course& Course::operator=(Course& other)
 
 Course::~Course()
 {
-    delete[] classes;
 }
 
 Class Course::getClass(int id)
 {
-    return classes[id];
+    Class temp = Class(id, course_id, 0);
+    return *classes.Search(&temp)->GetData();
 }
 
 int Course::getCourseId()
@@ -100,10 +96,18 @@ bool Course::operator==(const Course c) const
 
 void Course::addTime(int class_id, int time)
 {
-    classes[class_id].addTime(time);
+    Class temp = Class(class_id, course_id, 0);
+    classes.Search(&temp)->GetData()->addTime(time);
 }
 
 int Course::GetHash()
 {
     return course_id;
+}
+
+void Course::addClass(int time)
+{
+    Class new_class = Class(num_of_classes, course_id, time);
+    classes.Insert(new_class);
+    num_of_classes++;
 }

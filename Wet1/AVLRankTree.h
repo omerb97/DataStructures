@@ -9,18 +9,21 @@ template<class T>
 struct Node
 {
     T data;
-    Node* left;
-    Node* right;
-    Node* parent;
+    Node *left;
+    Node *right;
+    Node *parent;
     int balance_factor;
     int rank;
+
     Node() {};
-    Node(T data, Node* left, Node* right, Node* parent, int balance_factor, int rank);
+
+    Node(T data, Node *left, Node *right, Node *parent, int balance_factor, int rank);
+
     ~Node();
 };
 
 template<class T>
-Node<T>::Node(T data, Node* left, Node* right, Node* parent, int balance_factor, int rank) : data(data)
+Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor, int rank) : data(data)
 {
     this->left = left;
     this->right = right;
@@ -46,72 +49,70 @@ template<class T>
 class AVLRankTree
 {
 private:
-    Node<T>* root;
-    Node<T>* max_node;
-    Node<T>* min_node;
+    Node<T> *root;
+    Node<T> *max_node;
+    Node<T> *min_node;
 
-    void createNode(Node<T>* node, T data);
+    void createNode(Node<T> *node, T data);
 
-    void inOrderHelper(Node<T>* node);
+    void inOrderHelper(Node<T> *node);
 
-    void preOrderHelper(Node<T>* node);
+    void preOrderHelper(Node<T> *node);
 
-    Node<T>* searchHelper(Node<T>* node, T data);
+    Node<T> *searchHelper(Node<T> *node, T data);
 
-    Node<T>* deleteNodeHelper(Node<T>* node, T data);
+    Node<T> *deleteNodeHelper(Node<T> *node, T data);
 
-    Node<T>* minimumNode(Node<T>* node);
+    Node<T> *minimumNode(Node<T> *node);
 
-    Node<T>* maximumNode(Node<T>* node);
+    Node<T> *maximumNode(Node<T> *node);
 
-    void rebalanceAfterInsert(Node<T>* node);
+    void rebalanceAfterInsert(Node<T> *node);
 
-    Node<T>* rebalanceAfterDelete(Node<T>* node);
+    Node<T> *rebalanceAfterDelete(Node<T> *node);
 
-    void balanceTree(Node<T>* node);
+    void balanceTree(Node<T> *node);
 
-    Node<T>* updateBalance(Node<T>* node);
+    Node<T> *updateBalance(Node<T> *node);
 
-    Node<T>* leftRotate(Node<T>* node);
+    Node<T> *leftRotate(Node<T> *node);
 
-    Node<T>* rightRotate(Node<T>* node);
+    Node<T> *rightRotate(Node<T> *node);
 
-    void clearHelper(Node<T>* node);
+    void clearHelper(Node<T> *node);
 
-    int getBalanceFactor(Node<T>* node);
+    int getBalanceFactor(Node<T> *node);
 
-    int getHeight(Node<T>* node);
+    int getHeight(Node<T> *node);
 
     int max(int x, int y);
 
 public:
     AVLRankTree(); //c'tor
-    AVLRankTree(const AVLRankTree& node); //copy c'tor
+    AVLRankTree(const AVLRankTree &node); //copy c'tor
     ~AVLRankTree(); //d'tor
 
     void insert(T insertData);
 
-    Node<T>* deleteNode(T data);
+    Node<T> *deleteNode(T data);
 
-    Node<T>* getMax();
+    Node<T> *getMax();
 
-    Node<T>* getMin();
+    Node<T> *getMin();
 
     void inOrder();
 
     void preOrder();
 
-    Node<T>* search(T wantedData);
+    Node<T> *search(T wantedData);
 
-    T* GetData(Node<T>* node);
+    T *GetData(Node<T> *node);
 
-    void searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* index);
+    T findIthMax(int i);
 
-    void reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* index);
+    void searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index);
 
-    friend void inOrder(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
-
-    friend void searchByMin(Node<Course>* node, Class* maxArray, int maxIndex, int* index);
+    void reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index);
 };
 
 template<class T>
@@ -122,7 +123,7 @@ AVLRankTree<T>::AVLRankTree()
 
 
 template<class T>
-AVLRankTree<T>::AVLRankTree(const AVLRankTree& node) : root(node.root)
+AVLRankTree<T>::AVLRankTree(const AVLRankTree &node) : root(node.root)
 {
 
 }
@@ -134,7 +135,7 @@ AVLRankTree<T>::~AVLRankTree()
 }
 
 template<class T>
-void AVLRankTree<T>::balanceTree(Node<T>* node)
+void AVLRankTree<T>::balanceTree(Node<T> *node)
 {
     if (node->balance_factor < -1 || node->balance_factor > 1)
     {
@@ -164,9 +165,9 @@ void AVLRankTree<T>::balanceTree(Node<T>* node)
 template<class T>
 void AVLRankTree<T>::insert(T insertData)
 {
-    Node<T>* node = new Node<T>(insertData, nullptr, nullptr, nullptr, 0, 1);
-    Node<T>* y = nullptr;
-    Node<T>* x = this->root;
+    Node<T> *node = new Node<T>(insertData, nullptr, nullptr, nullptr, 0, 1);
+    Node<T> *y = nullptr;
+    Node<T> *x = this->root;
 
     while (x != nullptr)
     {
@@ -221,7 +222,7 @@ void AVLRankTree<T>::inOrder()
 }
 
 template<class T>
-void AVLRankTree<T>::createNode(Node<T>* node, T data)
+void AVLRankTree<T>::createNode(Node<T> *node, T data)
 {
     node->data = data;
     node->parent = nullptr;
@@ -232,7 +233,7 @@ void AVLRankTree<T>::createNode(Node<T>* node, T data)
 }
 
 template<class T>
-void AVLRankTree<T>::inOrderHelper(Node<T>* node)
+void AVLRankTree<T>::inOrderHelper(Node<T> *node)
 {
     if (node == NULL)
     {
@@ -244,21 +245,21 @@ void AVLRankTree<T>::inOrderHelper(Node<T>* node)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::leftRotate(Node<T>* node)
+Node<T> *AVLRankTree<T>::leftRotate(Node<T> *node)
 {
-    Node<T>* temp = node->right;
-    if(temp)
+    Node<T> *temp = node->right;
+    if (temp)
     {
         node->right = temp->left;
     }
 
     node->rank = 1;
 
-    if(node->right)
+    if (node->right)
     {
         node->rank += node->right;
     }
-    if(node->left)
+    if (node->left)
     {
         node->rank += node->left;
     }
@@ -267,7 +268,7 @@ Node<T>* AVLRankTree<T>::leftRotate(Node<T>* node)
     {
         temp->left->parent = node;
     }
-    if(temp)
+    if (temp)
     {
         temp->parent = node->parent;
     }
@@ -279,17 +280,17 @@ Node<T>* AVLRankTree<T>::leftRotate(Node<T>* node)
     {
         node->parent->left = temp;
     }
-    else if(node->parent)
+    else if (node->parent)
     {
         node->parent->right = temp;
     }
-    if(temp)
+    if (temp)
     {
         temp->left = node;
 
         temp->rank = temp->left->rank + 1;
 
-        if(temp->right)
+        if (temp->right)
         {
             temp->rank += temp->right->rank;
         }
@@ -320,18 +321,18 @@ Node<T>* AVLRankTree<T>::leftRotate(Node<T>* node)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::rightRotate(Node<T>* node)
+Node<T> *AVLRankTree<T>::rightRotate(Node<T> *node)
 {
-    Node<T>* temp = node->left;
+    Node<T> *temp = node->left;
     node->left = temp->right;
 
     node->rank = 1;
 
-    if(node->right)
+    if (node->right)
     {
         node->rank += node->right;
     }
-    if(node->left)
+    if (node->left)
     {
         node->rank += node->left;
     }
@@ -358,7 +359,7 @@ Node<T>* AVLRankTree<T>::rightRotate(Node<T>* node)
 
     temp->rank = temp->right->rank + 1;
 
-    if(temp->left)
+    if (temp->left)
     {
         temp->rank += temp->left->rank;
     }
@@ -386,11 +387,11 @@ Node<T>* AVLRankTree<T>::rightRotate(Node<T>* node)
 }
 
 template<class T>
-void AVLRankTree<T>::rebalanceAfterInsert(Node<T>* node)
+void AVLRankTree<T>::rebalanceAfterInsert(Node<T> *node)
 {
     if (node->balance_factor > 0)
     {
-        if(node->left->balance_factor >= 0)
+        if (node->left->balance_factor >= 0)
         {
             rightRotate(node);
         }
@@ -402,7 +403,7 @@ void AVLRankTree<T>::rebalanceAfterInsert(Node<T>* node)
     }
     else if (node->balance_factor < 0)
     {
-        if(node->right->balance_factor <= 0)
+        if (node->right->balance_factor <= 0)
         {
             leftRotate(node);
         }
@@ -415,14 +416,14 @@ void AVLRankTree<T>::rebalanceAfterInsert(Node<T>* node)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::search(T wantedData)
+Node<T> *AVLRankTree<T>::search(T wantedData)
 {
     T temp(wantedData);
     return searchHelper(root, temp);
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::searchHelper(Node<T>* node, T data)
+Node<T> *AVLRankTree<T>::searchHelper(Node<T> *node, T data)
 {
     if (node == nullptr || data == node->data)
     {
@@ -437,7 +438,7 @@ Node<T>* AVLRankTree<T>::searchHelper(Node<T>* node, T data)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
+Node<T> *AVLRankTree<T>::deleteNodeHelper(Node<T> *node, T data)
 {
     if (node == nullptr)
     {
@@ -464,11 +465,11 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
             {
                 node->parent->right = nullptr;
             }
-            else if(node->parent && node->parent->left && node->parent->left->data == node->data)
+            else if (node->parent && node->parent->left && node->parent->left->data == node->data)
             {
                 node->parent->left = nullptr;
             }
-            else if(!node->parent)
+            else if (!node->parent)
             {
                 root = nullptr;
             }
@@ -479,7 +480,7 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
             //node has only one son
         else if (node->left == nullptr)
         {
-            Node<T>* temp = node;
+            Node<T> *temp = node;
             node = node->right;
             node->parent = temp->parent;
             temp->right = nullptr;
@@ -488,11 +489,11 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
             {
                 node->parent->right = node;
             }
-            else if(node->parent)
+            else if (node->parent)
             {
                 node->parent->left = node;
             }
-            else if(temp->data == root->data)
+            else if (temp->data == root->data)
             {
                 root = node;
             }
@@ -501,7 +502,7 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
         }
         else if (node->right == nullptr)
         {
-            Node<T>* temp = node;
+            Node<T> *temp = node;
             node = node->left;
             node->parent = temp->parent;
             temp->left = nullptr;
@@ -510,11 +511,11 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
             {
                 node->parent->right = node;
             }
-            else if(node->parent)
+            else if (node->parent)
             {
                 node->parent->left = node;
             }
-            else if(temp->data == root->data)
+            else if (temp->data == root->data)
             {
                 root = node;
             }
@@ -525,7 +526,7 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
             //node has two sons
         else
         {
-            Node<T>* temp = minimumNode(node->right);
+            Node<T> *temp = minimumNode(node->right);
             node->data = temp->data;
             node->right = deleteNodeHelper(node->right, temp->data);
         }
@@ -537,9 +538,9 @@ Node<T>* AVLRankTree<T>::deleteNodeHelper(Node<T>* node, T data)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::deleteNode(T data)
+Node<T> *AVLRankTree<T>::deleteNode(T data)
 {
-    Node<T>* deletedNode;
+    Node<T> *deletedNode;
     if (max_node->data == data && !(min_node->data == data))
     {
         deletedNode = deleteNodeHelper(root, data);
@@ -550,13 +551,13 @@ Node<T>* AVLRankTree<T>::deleteNode(T data)
         deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
     }
-    else if(min_node->data == data && max_node->data == data)
+    else if (min_node->data == data && max_node->data == data)
     {
         deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
         max_node = maximumNode(root);
     }
-    else if(!(max_node->data == data) && !(min_node->data == data))
+    else if (!(max_node->data == data) && !(min_node->data == data))
     {
         deletedNode = deleteNodeHelper(root, data);
         min_node = minimumNode(root);
@@ -567,9 +568,9 @@ Node<T>* AVLRankTree<T>::deleteNode(T data)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::minimumNode(Node<T>* node)
+Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
 {
-    Node<T>* current = node;
+    Node<T> *current = node;
     while (current && current->left != nullptr)
     {
         current = current->left;
@@ -578,9 +579,9 @@ Node<T>* AVLRankTree<T>::minimumNode(Node<T>* node)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::maximumNode(Node<T>* node)
+Node<T> *AVLRankTree<T>::maximumNode(Node<T> *node)
 {
-    Node<T>* current = node;
+    Node<T> *current = node;
     while (current && current->right != nullptr)
     {
         current = current->right;
@@ -589,7 +590,7 @@ Node<T>* AVLRankTree<T>::maximumNode(Node<T>* node)
 }
 
 template<class T>
-void AVLRankTree<T>::clearHelper(Node<T>* node)
+void AVLRankTree<T>::clearHelper(Node<T> *node)
 {
     if (node != NULL)
     {
@@ -613,7 +614,7 @@ int AVLRankTree<T>::max(int x, int y)
 }
 
 template<class T>
-int AVLRankTree<T>::getHeight(Node<T>* node)
+int AVLRankTree<T>::getHeight(Node<T> *node)
 {
     if (!node)
     {
@@ -624,13 +625,13 @@ int AVLRankTree<T>::getHeight(Node<T>* node)
 }
 
 template<class T>
-int AVLRankTree<T>::getBalanceFactor(Node<T>* node)
+int AVLRankTree<T>::getBalanceFactor(Node<T> *node)
 {
     return getHeight(node->left) - getHeight(node->right);
 }
 
 template<class T>
-void AVLRankTree<T>::preOrderHelper(Node<T>* node)
+void AVLRankTree<T>::preOrderHelper(Node<T> *node)
 {
     if (node == NULL)
     {
@@ -648,7 +649,7 @@ void AVLRankTree<T>::preOrder()
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::updateBalance(Node<T>* node)
+Node<T> *AVLRankTree<T>::updateBalance(Node<T> *node)
 {
     if (!node)
     {
@@ -665,7 +666,7 @@ Node<T>* AVLRankTree<T>::updateBalance(Node<T>* node)
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::rebalanceAfterDelete(Node<T>* node)
+Node<T> *AVLRankTree<T>::rebalanceAfterDelete(Node<T> *node)
 {
     //LL
     if (node->balance_factor > 1 && node->left->balance_factor >= 0)
@@ -693,13 +694,13 @@ Node<T>* AVLRankTree<T>::rebalanceAfterDelete(Node<T>* node)
 }
 
 template<class T>
-T* AVLRankTree<T>::GetData(Node<T>* node)
+T *AVLRankTree<T>::GetData(Node<T> *node)
 {
     return node->data;
 }
 
 template<class T>
-void AVLRankTree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, int* index)
+void AVLRankTree<T>::reverseInOrder(Node<T> *node, T *maxArray, int maxIndex, int *index)
 {
     if (node == NULL || maxIndex <= *index)
     {
@@ -719,7 +720,7 @@ void AVLRankTree<T>::reverseInOrder(Node<T>* node, T* maxArray, int maxIndex, in
 }
 
 template<class T>
-void AVLRankTree<T>::searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* index)
+void AVLRankTree<T>::searchByMax(Node<T> *node, T *maxArray, int maxIndex, int *index)
 {
     if (maxIndex > *index)
     {
@@ -744,7 +745,7 @@ void AVLRankTree<T>::searchByMax(Node<T>* node, T* maxArray, int maxIndex, int* 
 
 
 template<class T>
-Node<T>* AVLRankTree<T>::getMax()
+Node<T> *AVLRankTree<T>::getMax()
 {
     if (max_node)
     {
@@ -754,7 +755,7 @@ Node<T>* AVLRankTree<T>::getMax()
 }
 
 template<class T>
-Node<T>* AVLRankTree<T>::getMin()
+Node<T> *AVLRankTree<T>::getMin()
 {
     if (min_node)
     {
@@ -762,4 +763,16 @@ Node<T>* AVLRankTree<T>::getMin()
     }
     return nullptr;
 }
+
+template<class T>
+T AVLRankTree<T>::findIthMax(int i)
+{
+    Node<T> *current = root;
+    while (current && current->rank != i && current->right != nullptr)
+    {
+        current = current->right;
+    }
+    return current->data;
+}
+
 #endif //AVLRANKTREE_H
