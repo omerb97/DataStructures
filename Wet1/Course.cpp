@@ -9,7 +9,7 @@ Course::Course(const Course& course)
     for (int i = 0; i < num_of_classes; i++)
     {
         Class temp = Class(i, course_id, 0);
-        classes.Insert(course.classes.Search(temp)->GetData());
+        classes.Insert(course.classes.Search(&temp)->GetData());
     }
 }
 
@@ -35,7 +35,7 @@ Course& Course::operator=(Course& other)
     for (int i = 0; i < num_of_classes; i++)
     {
         Class temp = Class(i, course_id, 0);
-        classes.Insert(*(other.classes.Search(&temp)->GetData()));
+        classes.Insert((other.classes.Search(&temp)->GetData()));
     }
 
     return *this;
@@ -45,10 +45,10 @@ Course::~Course()
 {
 }
 
-Class Course::getClass(int id)
+Class* Course::getClass(int id)
 {
     Class temp = Class(id, course_id, 0);
-    return *classes.Search(&temp)->GetData();
+    return classes.Search(&temp)->GetData();
 }
 
 int Course::getCourseId()
@@ -108,6 +108,6 @@ int Course::GetHash()
 void Course::addClass(int time)
 {
     Class new_class = Class(num_of_classes, course_id, time);
-    classes.Insert(new_class);
+    classes.Insert(&new_class);
     num_of_classes++;
 }

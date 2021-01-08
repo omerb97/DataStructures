@@ -26,7 +26,7 @@ public:
 
     int getNumOfClasses();
 
-    Class getClass(int id);
+    Class* getClass(int id);
 
     void addClass(int time = 0);
 

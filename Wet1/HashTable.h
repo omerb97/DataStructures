@@ -22,7 +22,7 @@ public:
     ~HashTable();
     void Insert (T* data);
     void Remove (T* data);
-    ListNode<T>* Search (T* data);
+    ListNode<T>* Search (T* data) const;
 };
 
 
@@ -105,7 +105,7 @@ void HashTable<T>::Remove(T* data)
 }
 
 template <class T>
-ListNode<T>* HashTable<T>::Search(T* data)
+ListNode<T>* HashTable<T>::Search(T* data) const
 {
     int hashFuncInput = data->GetHash();
     int hashNum =  HashFunction(hashFuncInput);
