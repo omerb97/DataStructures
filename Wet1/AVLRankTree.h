@@ -75,6 +75,8 @@ private:
 
     int max(int x, int y);
 
+    Node<T>* minimumNode(Node<T>* node);
+
 public:
     AVLRankTree(); //c'tor
     AVLRankTree(const AVLRankTree &node); //copy c'tor
@@ -577,6 +579,17 @@ T AVLRankTree<T>::findIthMax(int i)
         current = current->right;
     }
     return current->data;
+}
+
+template<class T>
+Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
+{
+    Node<T>* current = node;
+    while (current && current->left != nullptr)
+    {
+        current = current->left;
+    }
+    return current;
 }
 
 #endif //AVLRANKTREE_H
