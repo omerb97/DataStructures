@@ -65,15 +65,14 @@ void List<T>::Insert(T* data)
 template<class T>
 ListNode<T>* List<T>::Search(T* data)
 {
-    ListNode<T> temp = *this->head;
-    while (temp.GetData() != data && temp != nullptr)
+    ListNode<T>* temp = this->head;
+    while (temp != nullptr && *temp->GetData() != *data)
     {
-        temp = temp.GetNext();
+        temp = temp->GetNext();
     }
-    temp = nullptr;
     if (temp == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -84,16 +83,16 @@ ListNode<T>* List<T>::Search(T* data)
 template<class T>
 void List<T>::Remove(T* data)
 {
-    if (Search(data) == NULL)
+    if (Search(data) == nullptr)
     {
         return;
     }
-    if (this->head->GetData() == data)//if its the first node that we are deleting
+    if (*this->head->GetData() == *data)//if its the first node that we are deleting
     {
-        ListNode<T>* deleteNode = *this->head;
+        ListNode<T>* deleteNode = this->head;
         if(this->head->GetNext())
         {
-            ListNode<T> newHead = this->head->GetNext();
+            ListNode<T>* newHead = this->head->GetNext();
             this->head = newHead;
             delete deleteNode;
         }
@@ -108,7 +107,7 @@ void List<T>::Remove(T* data)
         int position = 2;
         ListNode<T> *previous = this->head;
         ListNode<T> *current = this->head->GetNext();
-        while (current->GetData() != data && current != NULL)
+        while (current != nullptr && *current->GetData() != *data)
         {
             previous = current; // need to implement and operator =
             current = current->GetNext();

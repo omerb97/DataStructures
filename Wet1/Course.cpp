@@ -13,7 +13,7 @@ Course::Course(const Course& course)
     }
 }
 
-Course::Course(int course_id, int num_of_classes)
+Course::Course(int course_id)
 {
     this->course_id = course_id;
     this->num_of_classes = num_of_classes;
@@ -110,4 +110,9 @@ void Course::addClass(int time)
     Class new_class = Class(num_of_classes, course_id, time);
     classes.Insert(&new_class);
     num_of_classes++;
+}
+
+bool Course::operator!=(const Course c) const
+{
+    return !(c == *this);
 }

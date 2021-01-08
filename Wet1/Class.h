@@ -30,6 +30,8 @@ public:
 
     bool operator==(const Class c) const;
 
+    bool operator!=(const Class c) const;
+
     int GetHash();
 
 };

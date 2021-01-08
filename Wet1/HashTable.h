@@ -15,7 +15,7 @@ private:
     int arraySize;
     int filledNum;
 
-    int HashFunction(int input);
+    int HashFunction(int input) const;
     void CheckandReorganize();
 public:
     explicit HashTable(int starting_size = STARTING_SIZE);
@@ -50,7 +50,7 @@ HashTable<T>::~HashTable()
 }
 
 template <class T>
-int HashTable<T>::HashFunction(int input)
+int HashTable<T>::HashFunction(int input) const
 {
     return (input % this->arraySize);
 }
@@ -99,7 +99,7 @@ void HashTable<T>::Remove(T* data)
 {
     int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
-    List<T> temp = this->table[hashNum];
+    List<T> temp = *this->table[hashNum];
     temp.Remove(data);
     this->filledNum--;
 }
@@ -108,9 +108,9 @@ template <class T>
 ListNode<T>* HashTable<T>::Search(T* data) const
 {
     int hashFuncInput = data->GetHash();
-    int hashNum =  HashFunction(hashFuncInput);
-    List<T> temp = this->table[hashNum];
-    ListNode<T> wantedNode = temp.Search(data);
+    int hashNum = HashFunction(hashFuncInput);
+    List<T> temp = *this->table[hashNum];
+    ListNode<T>* wantedNode = temp.Search(data);
     return wantedNode;
 }
 

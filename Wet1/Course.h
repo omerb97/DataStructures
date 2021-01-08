@@ -16,7 +16,7 @@ public:
 
     Course(const Course& course);
 
-    Course(int course_id, int num_of_classes = 0);
+    Course(int course_id);
 
     Course& operator=(Course& other);
 
@@ -38,7 +38,10 @@ public:
 
     bool operator==(const Course c) const;
 
+    bool operator!=(const Course c) const;
+
     int GetHash();
+
 };
 
 #endif

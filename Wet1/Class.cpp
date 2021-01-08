@@ -87,7 +87,7 @@ bool Class::operator>(const Class c) const
 
 bool Class::operator==(const Class c) const
 {
-    return c.class_id == class_id && c.time == time && c.course_id == course_id;
+    return c.class_id == class_id && c.course_id == course_id;
 }
 
 Class::Class(Class const& c)
@@ -100,5 +100,10 @@ Class::Class(Class const& c)
 int Class::GetHash()
 {
     return this->class_id;
+}
+
+bool Class::operator!=(const Class c) const
+{
+    return !(*this == c);
 }
 

@@ -8,9 +8,22 @@
 #include "CoursesManager.h"
 
 int main() {
-    HashTable<Course> initTry;
-    Course tryCourse(10,2);
+    HashTable<Course> initTry = HashTable<Course>();
+    Course tryCourse(10);
     initTry.Insert(&tryCourse);
+
+    if(initTry.Search(&tryCourse))
+    {
+        std::cout << "success"<< std::endl;
+    }
+
+    initTry.Remove(&tryCourse);
+
+    if(!initTry.Search(&tryCourse))
+    {
+        std::cout << "success" << std::endl;
+    }
+
     int o= 5;
     return 0;
 }

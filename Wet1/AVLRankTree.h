@@ -257,11 +257,11 @@ Node<T> *AVLRankTree<T>::leftRotate(Node<T> *node)
 
     if (node->right)
     {
-        node->rank += node->right;
+        node->rank += node->right->rank;
     }
     if (node->left)
     {
-        node->rank += node->left;
+        node->rank += node->left->rank;
     }
 
     if (temp && temp->left != nullptr)
@@ -330,11 +330,11 @@ Node<T> *AVLRankTree<T>::rightRotate(Node<T> *node)
 
     if (node->right)
     {
-        node->rank += node->right;
+        node->rank += node->right->rank;
     }
     if (node->left)
     {
-        node->rank += node->left;
+        node->rank += node->left->rank;
     }
 
     if (temp->right != nullptr)
