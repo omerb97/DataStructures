@@ -3,32 +3,38 @@
 
 #include "ListNode.h"
 
-template <class T>
+template<class T>
 class List
 {
 private:
-    ListNode<T>* head;
+    ListNode<T> *head;
     int length;
 
 public:
     explicit List();
+
     ~List() = default;
-    ListNode<T>* GetHead();
+
+    ListNode<T> *GetHead();
+
     int GetLength();
-    void Insert(T* data);
-    void Remove(T* data);
-    ListNode<T>* Search(T* data);
+
+    void Insert(T *data);
+
+    void Remove(T *data);
+
+    ListNode<T> *Search(T *data);
 };
 
 template<class T>
-List<T>::List() : head(nullptr), length(0){}
+List<T>::List() : head(nullptr), length(0) {}
 
 
 
 //todo: dont really know what to do with all the ctor dto etc...
 
 template<class T>
-ListNode<T>* List<T>::GetHead()
+ListNode<T> *List<T>::GetHead()
 {
     return this->head;
 }
@@ -40,10 +46,10 @@ int List<T>::GetLength()
 }
 
 template<class T>
-void List<T>::Insert(T* data)
+void List<T>::Insert(T *data)
 {
     ListNode<T> *newNode = new ListNode<T>(data, nullptr);
-    ListNode<T>* temp = this->head;
+    ListNode<T> *temp = this->head;
     if (temp == nullptr)
     {
         this->head = newNode;
@@ -63,10 +69,10 @@ void List<T>::Insert(T* data)
 
 
 template<class T>
-ListNode<T>* List<T>::Search(T* data)
+ListNode<T> *List<T>::Search(T *data)
 {
-    ListNode<T>* temp = this->head;
-    while (temp != nullptr && *temp->GetData() != *data)
+    ListNode<T> *temp = this->head;
+    while (temp != nullptr && *(temp->GetData()) != *data)
     {
         temp = temp->GetNext();
     }
@@ -81,7 +87,7 @@ ListNode<T>* List<T>::Search(T* data)
 }
 
 template<class T>
-void List<T>::Remove(T* data)
+void List<T>::Remove(T *data)
 {
     if (Search(data) == nullptr)
     {
@@ -89,10 +95,10 @@ void List<T>::Remove(T* data)
     }
     if (*this->head->GetData() == *data)//if its the first node that we are deleting
     {
-        ListNode<T>* deleteNode = this->head;
-        if(this->head->GetNext())
+        ListNode<T> *deleteNode = this->head;
+        if (this->head->GetNext())
         {
-            ListNode<T>* newHead = this->head->GetNext();
+            ListNode<T> *newHead = this->head->GetNext();
             this->head = newHead;
             delete deleteNode;
         }
@@ -118,7 +124,6 @@ void List<T>::Remove(T* data)
     }
     this->length--;
 }
-
 
 
 #endif
