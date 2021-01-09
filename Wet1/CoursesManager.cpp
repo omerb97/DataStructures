@@ -104,7 +104,7 @@ void CoursesManager::getIthWatchedClass(int i, int* courseID, int* classID)
         throw TooManyClasses();
     }
 
-    Class ithClass = timeTree.findIthMax(i);
+    Class ithClass = timeTree.findIthMax(i, watchedClasses);
 
     (*courseID) = ithClass.getCourseId();
     (*classID) = ithClass.getClassId();

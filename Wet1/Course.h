@@ -9,7 +9,7 @@ class Course
 private:
     int course_id;
     int num_of_classes;
-    HashTable<Class> classes;
+    HashTable<Class>* classes;
 
 public:
     Course() = default;

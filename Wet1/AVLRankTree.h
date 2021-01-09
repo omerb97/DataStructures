@@ -29,6 +29,7 @@ Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor,
     this->right = right;
     this->parent = parent;
     this->balance_factor = balance_factor;
+    this->rank = rank;
 }
 
 template<class T>
@@ -90,7 +91,7 @@ public:
 
     T *GetData(Node<T> *node);
 
-    T findIthMax(int i);
+    T findIthMax(int i, int total);
 };
 
 template<class T>
@@ -571,7 +572,7 @@ T *AVLRankTree<T>::GetData(Node<T> *node)
 }
 
 template<class T>
-T AVLRankTree<T>::findIthMax(int i)
+T AVLRankTree<T>::findIthMax(int i, int total)
 {
     Node<T> *current = root;
     while (current && current->rank != i && current->right != nullptr)
