@@ -125,15 +125,14 @@ void List<T>::Remove(T *data)
 template<class T>
 List<T>::~List()
 {
-    ListNode<T>* curr = head;
-    ListNode<T>* temp = curr;
-    while(curr)
+    ListNode<T>* currentNode = this->head;
+    while (currentNode)
     {
-        curr = temp->GetNext();
-        delete temp;
+        ListNode<T>* nextNode = currentNode->GetNext();
+        delete currentNode;
+        currentNode = nextNode;
     }
 
-    delete curr;
 }
 
 #endif

@@ -93,7 +93,7 @@ void HashTable<T>::CheckandReorganize()
 template<class T>
 void HashTable<T>::Insert(T *data)
 {
-    int hashFuncInput = data->GetHash(); //todo: make getHash function for course and class
+    int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
     List<T> *temp = this->table[hashNum];
     temp->Insert(data);
@@ -116,8 +116,8 @@ ListNode<T> *HashTable<T>::Search(T *data) const
 {
     int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
-    List<T> temp = *this->table[hashNum];
-    ListNode<T> *wantedNode = temp.Search(data);
+    List<T>* temp = this->table[hashNum];
+    ListNode<T> *wantedNode = temp->Search(data);
     return wantedNode;
 }
 

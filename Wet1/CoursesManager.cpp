@@ -89,8 +89,8 @@ void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
         throw InvalidInputs();
     }
 
-    Class wantedClass = *wantedCourse.getClass(classID);
-    *timeviewed = wantedClass.getTime();
+    Class* wantedClass = wantedCourse.getClass(classID);
+    *timeviewed = wantedClass->getTime();
 }
 
 void CoursesManager::getIthWatchedClass(int i, int* courseID, int* classID)

@@ -10,7 +10,7 @@ private:
 public:
     ListNode() = default; //c'tor
     ListNode(T* data, ListNode<T> *next); //c'tor
-    ~ListNode() = default;
+    ~ListNode();
     ListNode& operator=(ListNode<T> const& other);
     T* GetData();
     ListNode* GetNext();
@@ -58,6 +58,12 @@ ListNode<T>& ListNode<T>::operator=(ListNode<T>const& other)
 {
     this->Data = other.Data;
     this->next = other.next;
+}
+
+template<class T>
+ListNode<T>::~ListNode()
+{
+    delete this->Data;
 }
 
 
