@@ -30,9 +30,6 @@ template<class T>
 List<T>::List() : head(nullptr), length(0) {}
 
 
-
-//todo: dont really know what to do with all the ctor dto etc...
-
 template<class T>
 ListNode<T> *List<T>::GetHead()
 {

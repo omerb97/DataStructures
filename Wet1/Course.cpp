@@ -107,8 +107,8 @@ int Course::GetHash()
 
 void Course::addClass(int time)
 {
-    Class new_class = Class(num_of_classes, course_id, time);
-    classes.Insert(&new_class);
+    Class* new_class = new Class(num_of_classes, course_id, time);
+    classes.Insert(new_class);
     num_of_classes++;
 }
 
