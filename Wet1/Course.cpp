@@ -43,6 +43,7 @@ Course& Course::operator=(Course& other)
 
 Course::~Course()
 {
+    delete  classes;
 }
 
 Class* Course::getClass(int id)

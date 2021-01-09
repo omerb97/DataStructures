@@ -13,7 +13,7 @@ private:
 public:
     explicit List();
 
-    ~List() = default;
+    ~List();
 
     ListNode<T> *GetHead();
 
@@ -122,5 +122,18 @@ void List<T>::Remove(T *data)
     this->length--;
 }
 
+template<class T>
+List<T>::~List()
+{
+    ListNode<T>* curr = head;
+    ListNode<T>* temp = curr;
+    while(curr)
+    {
+        curr = temp->GetNext();
+        delete temp;
+    }
+
+    delete curr;
+}
 
 #endif
