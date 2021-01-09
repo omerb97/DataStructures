@@ -6,13 +6,13 @@ void CoursesManager::addCourse(int courseID)
     {
         throw InvalidInputs();
     }
-    Course newCourse(courseID);
-    if (this->courses.Search(&newCourse) != nullptr)
+    Course* newCourse = new Course(courseID);
+    if (this->courses.Search(newCourse) != nullptr)
     {
         throw ValueExists();
     }
     //will only reach here if everything worked
-    this->courses.Insert(&newCourse);
+    this->courses.Insert(newCourse);
 }
 
 void CoursesManager::removeCourse(int courseID)
