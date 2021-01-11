@@ -68,19 +68,31 @@ void List<T>::Insert(T *data)
 template<class T>
 ListNode<T> *List<T>::Search(T *data)
 {
+//    ListNode<T> *temp = this->head;
+//    while (temp != nullptr && *(temp->GetData()) != *data)
+//    {
+//        temp = temp->GetNext();
+//    }
+//    if (temp == nullptr)
+//    {
+//        return nullptr;
+//    }
+//    else
+//    {
+//        return temp;
+//    }
+
     ListNode<T> *temp = this->head;
-    while (temp != nullptr && *(temp->GetData()) != *data)
+    while (temp != nullptr)
     {
+        if (*(temp->GetData()) == *data)
+        {
+            return temp;
+        }
         temp = temp->GetNext();
     }
-    if (temp == nullptr)
-    {
-        return nullptr;
-    }
-    else
-    {
-        return temp;
-    }
+    return nullptr;
+
 }
 
 template<class T>
