@@ -47,7 +47,7 @@ bool Class::operator<(const Class c) const
     {
         return false;
     }
-    else if (class_id > c.class_id)
+    else if (class_id < c.class_id)
     {
         return true;
     }
@@ -75,7 +75,7 @@ bool Class::operator>(const Class c) const
     {
         return false;
     }
-    else if (class_id < c.class_id)
+    else if (class_id > c.class_id)
     {
         return true;
     }

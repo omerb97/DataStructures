@@ -78,6 +78,8 @@ private:
 
     Node<T>* minimumNode(Node<T>* node);
 
+    Node<T>* FindIthHelper(Node<T>* node, int i, int counter);
+
 public:
     AVLRankTree(); //c'tor
     AVLRankTree(const AVLRankTree &node); //copy c'tor
@@ -150,7 +152,6 @@ void AVLRankTree<T>::insert(T insertData)
     while (x != nullptr)
     {
         y = x;
-        y->rank = y->rank + 1;
         if (node->data < x->data)
         {
             x = x->left;
@@ -158,6 +159,7 @@ void AVLRankTree<T>::insert(T insertData)
         else
         {
             x = x->right;
+            y->rank = y->rank + 1;
         }
     }
 
@@ -194,10 +196,6 @@ Node<T> *AVLRankTree<T>::leftRotate(Node<T> *node)
     {
         node->rank += node->right->rank;
     }
-    if (node->left)
-    {
-        node->rank += node->left->rank;
-    }
 
     if (temp && temp->left != nullptr)
     {
@@ -223,7 +221,7 @@ Node<T> *AVLRankTree<T>::leftRotate(Node<T> *node)
     {
         temp->left = node;
 
-        temp->rank = temp->left->rank + 1;
+        temp->rank = 1;
 
         if (temp->right)
         {
@@ -267,10 +265,6 @@ Node<T> *AVLRankTree<T>::rightRotate(Node<T> *node)
     {
         node->rank += node->right->rank;
     }
-    if (node->left)
-    {
-        node->rank += node->left->rank;
-    }
 
     if (temp->right != nullptr)
     {
@@ -293,11 +287,6 @@ Node<T> *AVLRankTree<T>::rightRotate(Node<T> *node)
     node->parent = temp;
 
     temp->rank = temp->right->rank + 1;
-
-    if (temp->left)
-    {
-        temp->rank += temp->left->rank;
-    }
 
     // update the balance factor
     if (temp->balance_factor > 0)
@@ -381,7 +370,6 @@ Node<T> *AVLRankTree<T>::deleteNodeHelper(Node<T> *node, T data)
     }
     else if (data < node->data)
     {
-        node->rank = node->rank - 1;
         node->left = deleteNodeHelper(node->left, data);
     }
     else if (data > node->data)
@@ -574,12 +562,17 @@ T *AVLRankTree<T>::GetData(Node<T> *node)
 template<class T>
 T AVLRankTree<T>::findIthMax(int i, int total)
 {
+//    Node<T> *current = root;
+//    while (current && current->rank != i)
+//    {
+//        current = current->right;
+//    }
+//    return current->data;
+
     Node<T> *current = root;
-    while (current && current->rank != i && current->right != nullptr)
-    {
-        current = current->right;
-    }
-    return current->data;
+    Node<T>* result = FindIthHelper(current, i, root->rank);
+    return result->data;
+
 }
 
 template<class T>
@@ -591,6 +584,42 @@ Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
         current = current->left;
     }
     return current;
+}
+
+template<class T>
+Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i, int counter)
+{
+    if(counter == i)
+    {
+        return node;
+    }
+    else if((counter) > i)
+    {
+        counter -= node->right->rank;
+        return FindIthHelper(node->right, i, counter);
+    }
+    else
+    {
+        counter += node->left->rank;
+        return FindIthHelper(node->left, i, counter);
+    }
+
+//    if (node->right && FindIthHelper(node->right, i))
+//    {
+//        return  FindIthHelper(node->right, i);
+//    }
+//    else if(node->rank == i)
+//    {
+//        return node;
+//    }
+//    else
+//    {
+//        if(node->left)
+//        {
+//            return FindIthHelper(node->left, i);
+//        }
+//    }
+//    return nullptr;
 }
 
 #endif //AVLRANKTREE_H
