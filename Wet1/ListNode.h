@@ -23,7 +23,7 @@ public:
 template<class T>
 ListNode<T>::ListNode(T* data, ListNode<T> *next)
 {
-    this->Data = data;
+    this->Data = new T(*data);
     this->next = next;
 }
 

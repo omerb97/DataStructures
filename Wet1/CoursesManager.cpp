@@ -13,6 +13,7 @@ void CoursesManager::addCourse(int courseID)
     }
     //will only reach here if everything worked
     this->courses.Insert(newCourse);
+    delete newCourse;
 }
 
 void CoursesManager::removeCourse(int courseID)

@@ -111,6 +111,7 @@ void Course::addClass(int time)
     Class* new_class = new Class(num_of_classes, course_id, time);
     classes->Insert(new_class);
     num_of_classes++;
+    delete new_class;
 }
 
 bool Course::operator!=(const Course c) const
