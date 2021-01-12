@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Course.h"
+#include "Exceptions.h"
 
 template<class T>
 struct Node
@@ -406,8 +407,8 @@ Node<T> *AVLRankTree<T>::deleteNodeHelper(Node<T> *node, T data)
     }
     else if (data < node->data)
     {
-        node->left = deleteNodeHelper(node->left, data);
         node->real_rank = node->real_rank - 1;
+        node->left = deleteNodeHelper(node->left, data);
     }
     else if (data > node->data)
     {
@@ -609,6 +610,10 @@ T AVLRankTree<T>::findIthMax(int i, int total)
 
     Node<T> *current = root;
     Node<T>* result = FindIthHelper(current, i, 0, true);
+    if(!result)
+    {
+        throw TooManyClasses();
+    }
     return result->data;
 
 }
@@ -627,6 +632,10 @@ Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
 template<class T>
 Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i, int counter, bool flag_only_right)
 {
+    if(node == nullptr)
+    {
+        return nullptr;
+    }
     if(flag_only_right)
     {
         if(node->right_rank == i)
