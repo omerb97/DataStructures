@@ -9,6 +9,7 @@ void CoursesManager::addCourse(int courseID)
     Course* newCourse = new Course(courseID);
     if (this->courses.Search(newCourse) != nullptr)
     {
+        delete newCourse;
         throw ValueExists();
     }
     //will only reach here if everything worked
@@ -44,27 +45,34 @@ void CoursesManager::removeCourse(int courseID)
 
 void CoursesManager::watchClass(int courseID, int classID, int time)
 {
-    if (courseID <= 0 || classID < 0 || time <= 0) {
+    if (courseID <= 0 || classID < 0 || time <= 0)
+    {
         throw InvalidInputs();
     }
     Course searchCourse(courseID);
-    Course* wantedCourse = ((this->courses.Search(&searchCourse))->GetData());
-
-    if (wantedCourse == nullptr) {
+    ListNode<Course>* temp = (this->courses.Search(&searchCourse));
+    if(temp == nullptr)
+    {
         throw ValueNoExist();
     }
-    if ((classID + 1) > wantedCourse->getNumOfClasses()) {
+
+    Course* wantedCourse = ((this->courses.Search(&searchCourse))->GetData());
+
+    if ((classID + 1) > wantedCourse->getNumOfClasses())
+    {
         throw InvalidInputs();
     }
 
     Class* wantedClass = (wantedCourse->getClass(classID));
 
-    if (wantedClass->getTime() != 0) {
+    if (wantedClass->getTime() != 0)
+    {
         this->timeTree.deleteNode(*wantedClass);
         wantedClass->addTime(time);
         this->timeTree.insert(*wantedClass);
     }
-    if (wantedClass->getTime() == 0) {
+    if (wantedClass->getTime() == 0)
+    {
         wantedClass->addTime(time);
         watchedClasses++;
         this->timeTree.insert(*wantedClass);
