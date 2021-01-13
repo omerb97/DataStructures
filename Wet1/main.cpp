@@ -1,302 +1,299 @@
-/***************************************************************************/
-/*                                                                         */
-/* 234218 Data DSs 1, Winter 2019-2020                                     */
-/* Homework : Wet 1                                                        */
-/*                                                                         */
-/***************************************************************************/
+#include <map>
+#include <iostream>
+#include <sstream>
+#include <functional>
+#include <cmath>
+#include <exception>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+#include <chrono>
+#include <random>
+#include <set>
+#include <climits>
 
-/***************************************************************************/
-/*                                                                         */
-/* File Name : main1.cpp                                                   */
-/*                                                                         */
-/* Holds the "int main()" function and the parser of the shell's           */
-/* command line.                                                           */
-/***************************************************************************/
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+// Edit the path if necessary
 #include "library2.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+using std::cout;
+using std::endl;
+using std::string;
+using namespace std::chrono;
 
-/* The command's strings */
+// Asserts that x is true
+#define ASSERT_TEST(x) do{if(!(x)){ \
+    std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<std::endl;\
+    return false; }} while(false);
+
+// Asserts that x causes no errors
+#define ASSERT_NO_ERROR(x) do{try{x;}catch(std::exception& e){std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<\
+    ": received error "<<"\""<<e.what()<<"\""<<" while expecting no errors"<<std::endl; return false;}} while(false);
+
+// Asserts that x causes this error (and no other error)
+#define ASSERT_ERROR(x, error) do{ \
+    try{x; std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<\
+    ": received no error while expecting "<<#error<<std::endl; return false;}\
+    catch(error& e){}\
+    catch(const std::exception& e){std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<\
+    ": received error: "<<"\""<<e.what()<<"\" while expecting "<<"\""<<#error<<"\""<<std::endl; return false;}\
+    } while(false);
+
+// Asserts that x causes this error (and no other error) with message
+#define ASSERT_ERROR_WITH_MESSAGE(x, error, message) do{ \
+    try{x; std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<\
+    ": received no error while expecting "<<#error<<std::endl; return false;}\
+    catch(error& e){ASSERT_TEST(string(e.what()) == (message));}\
+    catch(const std::exception& e){std::cout<<"Failed assertion at line "<<__LINE__<<" in "<<__func__<<\
+    ": received error: "<<"\""<<e.what()<<"\" while expecting "<<"\""<<#error<<"\""<<std::endl; return false;}\
+    } while(false);
+
+#define ADD_TEST(x) tests[#x]=x;
+
 typedef enum {
-    NONE_CMD = -2,
-    COMMENT_CMD = -1,
-    INIT_CMD = 0,
-    ADDCOURSE_CMD = 1,
-    REMOVECOURSE_CMD = 2,
-    ADDCLASS_CMD = 3,
-    WATCHCLASS_CMD = 4,
-    TIMEVIEWED_CMD = 5,
-    GETITH_CMD = 6,
-    QUIT_CMD = 7
-} commandType;
+    DIFF = -4,
+} getReturnCode;
 
-static const int numActions = 10;
-static const char *commandStr[] = {
-        "Init",
-        "AddCourse",
-        "RemoveCourse",
-        "AddClass",
-        "WatchClass",
-        "TimeViewed",
-        "GetIthWatchedClass",
-        "Quit" };
-
-static const char* ReturnValToStr(int val) {
-    switch (val) {
-        case SUCCESS:
-            return "SUCCESS";
-        case ALLOCATION_ERROR:
-            return "ALLOCATION_ERROR";
-        case FAILURE:
-            return "FAILURE";
-        case INVALID_INPUT:
-            return "INVALID_INPUT";
-        default:
-            return "";
+// Helper function to check the result of AddClass
+int AddClassAUX(void* DS, int courseID, int expected_classID){
+    int classID;
+    int return_code = AddClass(DS,courseID,&classID);
+    if(return_code == SUCCESS){
+        if(classID != expected_classID){
+            return DIFF;
+        }
     }
+    return return_code;
 }
 
-/* we assume maximum string size is not longer than 256  */
-#define MAX_STRING_INPUT_SIZE (255)
-#define MAX_BUFFER_SIZE       (255)
+// Helper function to calculate the average duration of a vector of durations
+long long calculateAverageDuration(std::vector<long long> durations, int repetitions){
+    long long sum = 0;
+    for(long long& element : durations){
+        sum += element;
+    }
+    return sum/repetitions;
+}
 
-#define StrCmp(Src1,Src2) ( strncmp((Src1),(Src2),strlen(Src1)) == 0 )
+// Test functions:
 
-typedef enum {
-    error_free, error
-} errorType;
-static errorType parser(const char* const command);
+// Function to check the complexity of a certain input size
+bool measureRuntime(int num_courses, int classes_per_course, int time_per_class, int repetitions, std::vector<long long>& result){
 
-#define ValidateRead(read_parameters,required_parameters,ErrorString,ErrorParams) \
-if ( (read_parameters)!=(required_parameters) ) { printf(ErrorString, ErrorParams); return error; }
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
 
-static bool isInit = false;
+    std::uniform_int_distribution<> int_distribution(1,INT_MAX);
+    std::uniform_int_distribution<> num_classes_distribution(1,num_courses*classes_per_course);
 
-/***************************************************************************/
-/* main                                                                    */
-/***************************************************************************/
+    std::set<int> course_IDs_set;
+    while((int)course_IDs_set.size() < num_courses + repetitions){
+        course_IDs_set.insert(int_distribution(generator));
+    }
+    std::vector<int> course_IDs;
+    course_IDs.assign(course_IDs_set.begin(),course_IDs_set.end());
 
-int main(int argc, const char**argv) {
+    // Create vectors for storing repetition results. Will be used to calculate average runtime.
+    std::vector<long long> init_durations;
+    std::vector<long long> add_course_durations;
+    std::vector<long long> add_class_durations;
+    std::vector<long long> watch_durations;
+    std::vector<long long> time_durations;
+    std::vector<long long> remove_durations;
+    std::vector<long long> get_durations;
+    std::vector<long long> quit_durations;
+    // Perform the measurements.
+    for(int i = 0; i < repetitions; i++){
+        // Measure the time it takes to initialize.
+        auto start = high_resolution_clock::now();
+        void* DS = Init();
+        auto stop = high_resolution_clock::now();
+        auto init_duration = duration_cast<nanoseconds>(stop - start);
+        init_durations.push_back(init_duration.count());
+        ASSERT_TEST(DS);
+        Quit(&DS);
+        ASSERT_TEST(DS == nullptr);
+    }
 
-    char buffer[MAX_STRING_INPUT_SIZE];
+    //Initialize the system and fill it with courses and classes.
+    void* DS = Init();
+    ASSERT_TEST(DS);
 
-    // Reading commands
-    while (fgets(buffer, MAX_STRING_INPUT_SIZE, stdin) != NULL) {
-        fflush(stdout);
-        if (parser(buffer) == error)
-            break;
-    };
+    // Fill the system with courses.
+    for(int i = 0; i < num_courses; i++){
+        ASSERT_TEST(AddCourse(DS,course_IDs[i]) == SUCCESS);
+        for(int j = 0; j < classes_per_course; j++){
+            ASSERT_TEST(AddClassAUX(DS,course_IDs[i],j) == SUCCESS);
+        }
+    }
+    // Fill the system so that all of the classes have time viewed.
+    for(int i = 0; i < num_courses; i++){
+        for(int j = 0; j < classes_per_course; j++){
+            ASSERT_TEST(WatchClass(DS,course_IDs[i],j,time_per_class) == SUCCESS);
+        }
+    }
+
+    for(int i = 0; i < repetitions; i++){
+
+        int course_to_add = course_IDs[num_courses + i];
+
+        int courseID;
+        int classID;
+
+        // Measure the time it takes to add a course.
+        auto start = high_resolution_clock::now();
+        ASSERT_TEST(AddCourse(DS,course_to_add) == SUCCESS);
+        auto stop = high_resolution_clock::now();
+        auto add_course_duration = duration_cast<nanoseconds>(stop - start);
+        add_course_durations.push_back(add_course_duration.count());
+
+        for(int j = 0; j < classes_per_course; j++){
+            ASSERT_TEST(AddClassAUX(DS,course_to_add,j) == SUCCESS);
+        }
+
+        // Measure the time it takes to add a class.
+        start = high_resolution_clock::now();
+        ASSERT_TEST(AddClass(DS,course_to_add,&classID) == SUCCESS);
+        stop = high_resolution_clock::now();
+        ASSERT_TEST(classID == classes_per_course);
+        auto add_class_duration = duration_cast<nanoseconds>(stop - start);
+        add_class_durations.push_back(add_class_duration.count());
+
+        // Measure the time it takes to add time to a class.
+        start = high_resolution_clock::now();
+        ASSERT_TEST(WatchClass(DS,course_to_add,classes_per_course,time_per_class) == SUCCESS);
+        stop = high_resolution_clock::now();
+        auto watch_duration = duration_cast<nanoseconds>(stop - start);
+        watch_durations.push_back(watch_duration.count());
+
+        // Measure the time it takes to add time to a class.
+        int time;
+        start = high_resolution_clock::now();
+        ASSERT_TEST(TimeViewed(DS,course_to_add,classes_per_course,&time) == SUCCESS);
+        stop = high_resolution_clock::now();
+        ASSERT_TEST(time == time_per_class)
+        auto time_duration = duration_cast<nanoseconds>(stop - start);
+        time_durations.push_back(time_duration.count());
+
+        // Measure the time it takes to remove a course.
+        start = high_resolution_clock::now();
+        ASSERT_TEST(RemoveCourse(DS,course_to_add) == SUCCESS);
+        stop = high_resolution_clock::now();
+        auto remove_duration = duration_cast<nanoseconds>(stop - start);
+        remove_durations.push_back(remove_duration.count());
+
+        // Measure the time it takes to get a random s.
+        start = high_resolution_clock::now();
+        int position = num_classes_distribution(generator);
+        ASSERT_TEST(GetIthWatchedClass(DS,position,&courseID,&classID) == SUCCESS);
+        stop = high_resolution_clock::now();
+        auto get_duration = duration_cast<nanoseconds>(stop - start);
+        get_durations.push_back(get_duration.count());
+    }
+    // Measure the time it takes to quit.
+    auto start = high_resolution_clock::now();
+    Quit(&DS);
+    auto stop = high_resolution_clock::now();
+    auto quit_duration = duration_cast<nanoseconds>(stop - start);
+    quit_durations.push_back(quit_duration.count());
+    ASSERT_TEST(DS == nullptr);
+
+    // Calculate the average duration of each operations.
+    long long init_average_duration = calculateAverageDuration(init_durations,repetitions);
+    long long add_course_average_duration = calculateAverageDuration(add_course_durations,repetitions);
+    long long add_class_average_duration = calculateAverageDuration(add_class_durations,repetitions);
+    long long watch_average_duration = calculateAverageDuration(watch_durations,repetitions);
+    long long time_average_duration = calculateAverageDuration(time_durations,repetitions);
+    long long remove_average_duration = calculateAverageDuration(remove_durations,repetitions);
+    long long get_average_duration = calculateAverageDuration(get_durations,repetitions);
+    // Not using average for quit because that would take a lot of time to run.
+    long long quit_average_duration = quit_durations[0];
+
+    // Return the results as a vector.
+    std::vector<long long> output = {init_average_duration,add_course_average_duration,add_class_average_duration,watch_average_duration,time_average_duration,remove_average_duration,get_average_duration,quit_average_duration};
+    result = output;
+    return true;
+}
+
+// Measure the time it takes for inputs in logarithmic scale to perform the various functions.
+bool testTimeComplexity(){
+    // Change these parameters to set the size of the test:
+    int base = 10;
+    int max_power = 5;
+    int number_of_classes_per_course = 10;
+    int time_per_class = 10;
+    int repetitions = 100;
+    // Run the test on different output sizes in logarithmic scale.
+    std::vector<long long> result;
+    for(int i = 1; i <= max_power; i++){
+        std::vector<long long> result_i;
+        ASSERT_TEST(measureRuntime(pow(base,i),number_of_classes_per_course,time_per_class,repetitions,result_i));
+        result.insert(result.end(),result_i.begin(),result_i.end());
+    }
+    // Print the results of the tests
+    std::cout<<"****Showing average runtime results from "<<repetitions<<" repetitions (except Quit):****"<<std::endl;
+    std::cout<<"****Ignore the first result in each function, it's probably larger than the others****"<<std::endl;
+    std::cout<<"Init ****O(1)****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"AddCourse ****O(1) amortized****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+1]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"AddClass ****O(1) amortized****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+2]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"WatchClass ****O(log(M+2)) amortized****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+3]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"TimeViewed ****O(1) amortized****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+4]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"RemoveCourse ****O(mlog(M)) amortized****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+5]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"GetIthWatchedClass ****O(log(M+2))****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+6]<<" nanoseconds."<<std::endl;
+    }
+    std::cout<<"Quit ****O(n+M)****:"<<std::endl;
+    for(int i = 1; i <= max_power; i++){
+        std::cout<<pow(base,i)<<": "<<result[(i-1)*8+7]<<" nanoseconds."<<std::endl;
+    }
+    return true;
+}
+
+// Functions to run the program:
+
+bool run_test(std::function<bool()> test, std::string test_name){
+    auto start = high_resolution_clock::now();
+    if(!test()){
+        std::cout<<test_name<<" - FAILED."<<std::endl;
+        return false;
+    }
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+    std::cout<<test_name<<" - PASSED in "<<duration.count()<<" milliseconds."<<std::endl;
+    return true;
+}
+
+int main(){
+
+    std::map<std::string, std::function<bool()>> tests;
+
+    ADD_TEST(testTimeComplexity);
+
+    int passed = 0;
+    for (std::pair<std::string, std::function<bool()>> element : tests)
+    {
+        passed += run_test(element.second, "Running " + element.first);
+    }
+
+    std::cout<<"Passed "<<passed<<" out of "<<tests.size()<<" tests."<<std::endl;
+
     return 0;
 }
-
-/***************************************************************************/
-/* Command Checker                                                         */
-/***************************************************************************/
-
-static commandType CheckCommand(const char* const command,
-                                const char** const command_arg) {
-    if (command == NULL || strlen(command) == 0 || StrCmp("\n", command))
-        return (NONE_CMD);
-    if (StrCmp("#", command)) {
-        if (strlen(command) > 1)
-            printf("%s", command);
-        return (COMMENT_CMD);
-    };
-    for (int index = 0; index < numActions; index++) {
-        if (StrCmp(commandStr[index], command)) {
-            *command_arg = command + strlen(commandStr[index]) + 1;
-            return ((commandType)index);
-        };
-    };
-    return (NONE_CMD);
-}
-
-/***************************************************************************/
-/* Commands Functions                                                      */
-/***************************************************************************/
-
-static errorType OnInit(void** DS, const char* const command);
-static errorType OnAddCourse(void* DS, const char* const command);
-static errorType OnRemoveCourse(void* DS, const char* const command);
-static errorType OnAddClass(void* DS, const char* const command);
-static errorType OnWatchClass(void* DS, const char* const command);
-static errorType OnTimeViewed(void* DS, const char* const command);
-static errorType OnGetIthWatchedClass(void* DS, const char* const command);
-static errorType OnQuit(void** DS, const char* const command);
-
-/***************************************************************************/
-/* Parser                                                                  */
-/***************************************************************************/
-
-static errorType parser(const char* const command) {
-    static void *DS = NULL; /* The general data structure */
-    const char* command_args = NULL;
-    errorType rtn_val = error;
-
-    commandType command_val = CheckCommand(command, &command_args);
-
-    switch (command_val) {
-
-        case (INIT_CMD):
-            rtn_val = OnInit(&DS, command_args);
-            break;
-        case (ADDCOURSE_CMD):
-            rtn_val = OnAddCourse(DS, command_args);
-            break;
-        case (REMOVECOURSE_CMD):
-            rtn_val = OnRemoveCourse(DS, command_args);
-            break;
-        case (ADDCLASS_CMD):
-            rtn_val = OnAddClass(DS, command_args);
-            break;
-        case (WATCHCLASS_CMD):
-            rtn_val = OnWatchClass(DS, command_args);
-            break;
-        case (TIMEVIEWED_CMD):
-            rtn_val = OnTimeViewed(DS, command_args);
-            break;
-        case (GETITH_CMD):
-            rtn_val = OnGetIthWatchedClass(DS, command_args);
-            break;
-        case (QUIT_CMD):
-            rtn_val = OnQuit(&DS, command_args);
-            break;
-
-        case (COMMENT_CMD):
-            rtn_val = error_free;
-            break;
-        case (NONE_CMD):
-            rtn_val = error;
-            break;
-        default:
-            assert(false);
-            break;
-    };
-    return (rtn_val);
-}
-
-static errorType OnInit(void** DS, const char* const command) {
-    if (isInit) {
-        printf("init was already called.\n");
-        return (error_free);
-    };
-    isInit = true;
-
-    ValidateRead(0, 0, "%s failed.\n", commandStr[INIT_CMD]);
-    *DS = Init();
-
-    if (*DS == NULL) {
-        printf("init failed.\n");
-        return error;
-    };
-
-    printf("init done.\n");
-    return error_free;
-}
-
-static errorType OnAddCourse(void* DS, const char* const command) {
-    int courseID;
-    ValidateRead(sscanf(command, "%d", &courseID), 1, "%s failed.\n", commandStr[ADDCOURSE_CMD]);
-    StatusType res = AddCourse(DS, courseID);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[ADDCOURSE_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %s\n", commandStr[ADDCOURSE_CMD], ReturnValToStr(res));
-    return error_free;
-}
-
-static errorType OnRemoveCourse(void* DS, const char* const command) {
-    int courseID;
-    ValidateRead(sscanf(command, "%d", &courseID), 1, "%s failed.\n", commandStr[REMOVECOURSE_CMD]);
-    StatusType res = RemoveCourse(DS, courseID);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[REMOVECOURSE_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %s\n", commandStr[REMOVECOURSE_CMD], ReturnValToStr(res));
-    return error_free;
-}
-
-static errorType OnAddClass(void* DS, const char* const command) {
-    int courseID, classID;
-    ValidateRead(sscanf(command, "%d", &courseID), 1, "%s failed.\n", commandStr[ADDCLASS_CMD]);
-    StatusType res = AddClass(DS, courseID, &classID);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[ADDCLASS_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %d\n", commandStr[ADDCLASS_CMD], classID);
-    return error_free;
-}
-
-static errorType OnWatchClass(void* DS, const char* const command) {
-    int courseID, classID, time;
-    ValidateRead(sscanf(command, "%d %d %d", &courseID, &classID, &time), 3, "%s failed.\n", commandStr[WATCHCLASS_CMD]);
-    StatusType res = WatchClass(DS, courseID, classID, time);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[WATCHCLASS_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %s\n", commandStr[WATCHCLASS_CMD], ReturnValToStr(res));
-    return error_free;
-}
-
-static errorType OnTimeViewed(void* DS, const char* const command) {
-    int courseID, classID, timeViewed;
-    ValidateRead(sscanf(command, "%d %d", &courseID, &classID), 2, "%s failed.\n", commandStr[TIMEVIEWED_CMD]);
-    StatusType res = TimeViewed(DS, courseID, classID, &timeViewed);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[TIMEVIEWED_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %d\n", commandStr[TIMEVIEWED_CMD], timeViewed);
-    return error_free;
-}
-
-static errorType OnGetIthWatchedClass(void* DS, const char* const command) {
-    int i, courseID, classID;
-    ValidateRead(sscanf(command, "%d", &i), 1, "%s failed.\n", commandStr[GETITH_CMD]);
-    StatusType res = GetIthWatchedClass(DS, i, &courseID, &classID);
-
-    if (res != SUCCESS) {
-        printf("%s: %s\n", commandStr[GETITH_CMD], ReturnValToStr(res));
-        return error_free;
-    }
-
-    printf("%s: %d %d\n", commandStr[GETITH_CMD], courseID, classID);
-    return error_free;
-}
-
-static errorType OnQuit(void** DS, const char* const command) {
-    Quit(DS);
-    if (*DS != NULL) {
-        printf("quit failed.\n");
-        return error;
-    };
-
-    isInit = false;
-    printf("quit done.\n");
-    return error_free;
-}
-
-#ifdef __cplusplus
-}
-#endif

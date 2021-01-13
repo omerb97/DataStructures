@@ -81,7 +81,7 @@ private:
 
     Node<T>* minimumNode(Node<T>* node);
 
-    Node<T>* FindIthHelper(Node<T>* node, int i, int counter, bool flag_only_right);
+    Node<T>* FindIthHelper(Node<T>* node, int i);
 
 public:
     AVLRankTree(); //c'tor
@@ -639,7 +639,7 @@ T AVLRankTree<T>::findIthMax(int i, int total)
 //    return current->data;
 
     Node<T> *current = root;
-    Node<T>* result = FindIthHelper(current, i, 0, true);
+    Node<T>* result = FindIthHelper(current, i);
     if(!result)
     {
         throw TooManyClasses();
@@ -660,48 +660,62 @@ Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
 }
 
 template<class T>
-Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i, int counter, bool flag_only_right)
+Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i)
 {
-    if(node == nullptr)
+    if(i == node->right_rank)
     {
-        return nullptr;
+        return node;
     }
-    if(flag_only_right)
+    else if(i > node->right_rank)
     {
-        if(node->right_rank == i)
-        {
-            return node;
-        }
-        else if(node->right_rank > i)
-        {
-            return FindIthHelper(node->right, i, counter, flag_only_right);
-        }
-        else
-        {
-            flag_only_right = false;
-            counter += node->right_rank;
-            counter += node->left->right_rank;
-            return FindIthHelper(node->left, i, counter, flag_only_right);
-        }
+        i = i - node->right_rank;
+        return FindIthHelper(node->left, i);
     }
     else
     {
-        if(counter == i)
-        {
-            return node;
-        }
-        else if(counter > i)
-        {
-            counter--;
-            //counter -= node->right->right_rank;
-            return FindIthHelper(node->right, i, counter, flag_only_right);
-        }
-        else
-        {
-            counter += node->left->right_rank;
-            return FindIthHelper(node->left, i, counter, flag_only_right);
-        }
+        return FindIthHelper(node->right, i);
     }
+
+//    if(node == nullptr)
+//    {
+//        return nullptr;
+//    }
+//    if(flag_only_right)
+//    {
+//        if(node->right_rank == i)
+//        {
+//            return node;
+//        }
+//        else if(node->right_rank > i)
+//        {
+//            return FindIthHelper(node->right, i, counter, flag_only_right);
+//        }
+//        else
+//        {
+//            flag_only_right = false;
+//            counter += node->right_rank;
+//            counter += node->left->right_rank;
+//            return FindIthHelper(node->left, i, counter, flag_only_right);
+//        }
+//    }
+//    else
+//    {
+//        if(counter == i)
+//        {
+//            return node;
+//        }
+//        else if(counter > i)
+//        {
+//            counter--;
+//            //counter -= node->right->right_rank;
+//            return FindIthHelper(node->right, i, counter, flag_only_right);
+//        }
+//        else
+//        {
+//            counter += node->left->right_rank;
+//            return FindIthHelper(node->left, i, counter, flag_only_right);
+//        }
+//    }
 }
 
 #endif //AVLRANKTREE_H
