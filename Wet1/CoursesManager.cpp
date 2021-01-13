@@ -41,6 +41,7 @@ void CoursesManager::removeCourse(int courseID)
     }
     totalClasses = totalClasses - wantedCourse.getNumOfClasses();
     this->courses.Remove(&wantedCourse);
+
 }
 
 void CoursesManager::watchClass(int courseID, int classID, int time)

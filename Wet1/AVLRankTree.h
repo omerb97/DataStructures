@@ -561,6 +561,21 @@ Node<T> *AVLRankTree<T>::updateBalance(Node<T> *node)
     {
         return rebalanceAfterDelete(node);
     }
+    else
+    {
+        node->right_rank = 1;
+        node->real_rank = 1;
+        if(node->left)
+        {
+            node->real_rank += node->left->real_rank;
+        }
+
+        if(node->right)
+        {
+            node->real_rank += node->right->real_rank;
+            node->right_rank += node->right->real_rank;
+        }
+    }
     return node;
 }
 
