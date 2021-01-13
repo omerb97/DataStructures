@@ -125,6 +125,21 @@ void AVLRankTree<T>::balanceTree(Node<T> *node)
         rebalanceAfterInsert(node);
         return;
     }
+    else
+    {
+        node->right_rank = 1;
+        node->real_rank = 1;
+        if(node->left)
+        {
+            node->real_rank += node->left->real_rank;
+        }
+
+        if(node->right)
+        {
+            node->real_rank += node->right->real_rank;
+            node->right_rank += node->right->real_rank;
+        }
+    }
 
     if (node->parent != nullptr)
     {
@@ -677,7 +692,8 @@ Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i, int counter, bool f
         }
         else if(counter > i)
         {
-            counter -= node->right->right_rank;
+            counter--;
+            //counter -= node->right->right_rank;
             return FindIthHelper(node->right, i, counter, flag_only_right);
         }
         else
