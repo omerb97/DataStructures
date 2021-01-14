@@ -25,7 +25,8 @@ struct Node
 };
 
 template<class T>
-Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor, int real_rank, int rank_right) : data(data)
+Node<T>::Node(T data, Node *left, Node *right, Node *parent, int balance_factor, int real_rank, int rank_right) : data(
+        data)
 {
     this->left = left;
     this->right = right;
@@ -79,9 +80,9 @@ private:
 
     int max(int x, int y);
 
-    Node<T>* minimumNode(Node<T>* node);
+    Node<T> *minimumNode(Node<T> *node);
 
-    Node<T>* FindIthHelper(Node<T>* node, int i);
+    Node<T> *FindIthHelper(Node<T> *node, int i);
 
 public:
     AVLRankTree(); //c'tor
@@ -129,12 +130,12 @@ void AVLRankTree<T>::balanceTree(Node<T> *node)
     {
         node->right_rank = 1;
         node->real_rank = 1;
-        if(node->left)
+        if (node->left)
         {
             node->real_rank += node->left->real_rank;
         }
 
-        if(node->right)
+        if (node->right)
         {
             node->real_rank += node->right->real_rank;
             node->right_rank += node->right->real_rank;
@@ -510,8 +511,6 @@ Node<T> *AVLRankTree<T>::deleteNodeHelper(Node<T> *node, T data)
     }
 
     return updateBalance(node);
-
-    // return node;
 }
 
 template<class T>
@@ -527,8 +526,6 @@ void AVLRankTree<T>::clearHelper(Node<T> *node)
 {
     if (node != NULL)
     {
-        //clearHelper(node->left);   // Recursively clear the left sub-tree
-        //clearHelper(node->right);   // Recursively clear the right sub-tree
         delete node;         // Delete this node
     }
 }
@@ -580,12 +577,12 @@ Node<T> *AVLRankTree<T>::updateBalance(Node<T> *node)
     {
         node->right_rank = 1;
         node->real_rank = 1;
-        if(node->left)
+        if (node->left)
         {
             node->real_rank += node->left->real_rank;
         }
 
-        if(node->right)
+        if (node->right)
         {
             node->real_rank += node->right->real_rank;
             node->right_rank += node->right->real_rank;
@@ -631,16 +628,9 @@ T *AVLRankTree<T>::GetData(Node<T> *node)
 template<class T>
 T AVLRankTree<T>::findIthMax(int i, int total)
 {
-//    Node<T> *current = root;
-//    while (current && current->rank != i)
-//    {
-//        current = current->right;
-//    }
-//    return current->data;
-
     Node<T> *current = root;
-    Node<T>* result = FindIthHelper(current, i);
-    if(!result)
+    Node<T> *result = FindIthHelper(current, i);
+    if (!result)
     {
         throw TooManyClasses();
     }
@@ -651,7 +641,7 @@ T AVLRankTree<T>::findIthMax(int i, int total)
 template<class T>
 Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
 {
-    Node<T>* current = node;
+    Node<T> *current = node;
     while (current && current->left != nullptr)
     {
         current = current->left;
@@ -662,11 +652,11 @@ Node<T> *AVLRankTree<T>::minimumNode(Node<T> *node)
 template<class T>
 Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i)
 {
-    if(i == node->right_rank)
+    if (i == node->right_rank)
     {
         return node;
     }
-    else if(i > node->right_rank)
+    else if (i > node->right_rank)
     {
         i = i - node->right_rank;
         return FindIthHelper(node->left, i);
@@ -675,47 +665,6 @@ Node<T> *AVLRankTree<T>::FindIthHelper(Node<T> *node, int i)
     {
         return FindIthHelper(node->right, i);
     }
-
-//    if(node == nullptr)
-//    {
-//        return nullptr;
-//    }
-//    if(flag_only_right)
-//    {
-//        if(node->right_rank == i)
-//        {
-//            return node;
-//        }
-//        else if(node->right_rank > i)
-//        {
-//            return FindIthHelper(node->right, i, counter, flag_only_right);
-//        }
-//        else
-//        {
-//            flag_only_right = false;
-//            counter += node->right_rank;
-//            counter += node->left->right_rank;
-//            return FindIthHelper(node->left, i, counter, flag_only_right);
-//        }
-//    }
-//    else
-//    {
-//        if(counter == i)
-//        {
-//            return node;
-//        }
-//        else if(counter > i)
-//        {
-//            counter--;
-//            //counter -= node->right->right_rank;
-//            return FindIthHelper(node->right, i, counter, flag_only_right);
-//        }
-//        else
-//        {
-//            counter += node->left->right_rank;
-//            return FindIthHelper(node->left, i, counter, flag_only_right);
-//        }
-//    }
 }
 
 #endif //AVLRANKTREE_H

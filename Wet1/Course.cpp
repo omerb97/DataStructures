@@ -1,6 +1,6 @@
 #include "Course.h"
 
-Course::Course(const Course& course)
+Course::Course(const Course &course)
 {
     course_id = course.course_id;
     num_of_classes = course.num_of_classes;
@@ -20,12 +20,12 @@ Course::Course(int course_id)
     this->classes = new HashTable<Class>();
 }
 
-Course& Course::operator=(Course& other)
+Course &Course::operator=(Course &other)
 {
     course_id = other.course_id;
     num_of_classes = other.num_of_classes;
 
-    if(this)
+    if (this)
     {
         classes->~HashTable();
     }
@@ -43,10 +43,10 @@ Course& Course::operator=(Course& other)
 
 Course::~Course()
 {
-    delete  classes;
+    delete classes;
 }
 
-Class* Course::getClass(int id)
+Class *Course::getClass(int id)
 {
     Class temp = Class(id, course_id, 0);
     return classes->Search(&temp)->GetData();
@@ -108,7 +108,7 @@ int Course::GetHash()
 
 void Course::addClass(int time)
 {
-    Class* new_class = new Class(num_of_classes, course_id, time);
+    Class *new_class = new Class(num_of_classes, course_id, time);
     classes->Insert(new_class);
     num_of_classes++;
     delete new_class;

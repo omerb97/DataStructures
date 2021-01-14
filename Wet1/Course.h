@@ -9,16 +9,16 @@ class Course
 private:
     int course_id;
     int num_of_classes;
-    HashTable<Class>* classes;
+    HashTable<Class> *classes;
 
 public:
     Course() = default;
 
-    Course(const Course& course);
+    Course(const Course &course);
 
     Course(int course_id);
 
-    Course& operator=(Course& other);
+    Course &operator=(Course &other);
 
     ~Course();
 
@@ -26,7 +26,7 @@ public:
 
     int getNumOfClasses();
 
-    Class* getClass(int id);
+    Class *getClass(int id);
 
     void addClass(int time = 0);
 

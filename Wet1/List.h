@@ -68,20 +68,6 @@ void List<T>::Insert(T *data)
 template<class T>
 ListNode<T> *List<T>::Search(T *data)
 {
-//    ListNode<T> *temp = this->head;
-//    while (temp != nullptr && *(temp->GetData()) != *data)
-//    {
-//        temp = temp->GetNext();
-//    }
-//    if (temp == nullptr)
-//    {
-//        return nullptr;
-//    }
-//    else
-//    {
-//        return temp;
-//    }
-
     ListNode<T> *temp = this->head;
     while (temp != nullptr)
     {
@@ -137,10 +123,10 @@ void List<T>::Remove(T *data)
 template<class T>
 List<T>::~List()
 {
-    ListNode<T>* currentNode = this->head;
+    ListNode<T> *currentNode = this->head;
     while (currentNode)
     {
-        ListNode<T>* nextNode = currentNode->GetNext();
+        ListNode<T> *nextNode = currentNode->GetNext();
         delete currentNode;
         currentNode = nextNode;
     }

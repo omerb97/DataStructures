@@ -6,7 +6,7 @@ void CoursesManager::addCourse(int courseID)
     {
         throw InvalidInputs();
     }
-    Course* newCourse = new Course(courseID);
+    Course *newCourse = new Course(courseID);
     if (this->courses.Search(newCourse) != nullptr)
     {
         delete newCourse;
@@ -51,20 +51,20 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
         throw InvalidInputs();
     }
     Course searchCourse(courseID);
-    ListNode<Course>* temp = (this->courses.Search(&searchCourse));
-    if(temp == nullptr)
+    ListNode<Course> *temp = (this->courses.Search(&searchCourse));
+    if (temp == nullptr)
     {
         throw ValueNoExist();
     }
 
-    Course* wantedCourse = ((this->courses.Search(&searchCourse))->GetData());
+    Course *wantedCourse = ((this->courses.Search(&searchCourse))->GetData());
 
     if ((classID + 1) > wantedCourse->getNumOfClasses())
     {
         throw InvalidInputs();
     }
 
-    Class* wantedClass = (wantedCourse->getClass(classID));
+    Class *wantedClass = (wantedCourse->getClass(classID));
 
     if (wantedClass->getTime() != 0)
     {
@@ -80,14 +80,15 @@ void CoursesManager::watchClass(int courseID, int classID, int time)
     }
 }
 
-void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
+void CoursesManager::timeViewed(int courseID, int classID, int *timeviewed)
 {
-    if (courseID <= 0 || classID < 0) {
+    if (courseID <= 0 || classID < 0)
+    {
         throw InvalidInputs();
     }
 
     Course searchCourse(courseID);
-    ListNode<Course>* isExistCourse = (this->courses.Search(&searchCourse));
+    ListNode<Course> *isExistCourse = (this->courses.Search(&searchCourse));
     if (isExistCourse == nullptr)
     {
         throw ValueNoExist();
@@ -99,11 +100,11 @@ void CoursesManager::timeViewed(int courseID, int classID, int* timeviewed)
         throw InvalidInputs();
     }
 
-    Class* wantedClass = wantedCourse.getClass(classID);
+    Class *wantedClass = wantedCourse.getClass(classID);
     *timeviewed = wantedClass->getTime();
 }
 
-void CoursesManager::getIthWatchedClass(int i, int* courseID, int* classID)
+void CoursesManager::getIthWatchedClass(int i, int *courseID, int *classID)
 {
     if (i <= 0)
     {
@@ -132,7 +133,7 @@ void CoursesManager::addClass(int courseID, int *classID)
     {
         throw ValueNoExist();
     }
-    Course* wantedCourse = (this->courses.Search(&searchCourse)->GetData());
+    Course *wantedCourse = (this->courses.Search(&searchCourse)->GetData());
 
     *classID = wantedCourse->getNumOfClasses();
     wantedCourse->addClass();

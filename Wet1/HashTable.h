@@ -72,7 +72,7 @@ void HashTable<T>::CheckandReorganize()
     {
         int oldSize = this->arraySize;
         this->arraySize = this->arraySize * 2;
-        List<T> **newTable = new List<T>*[this->arraySize]();
+        List<T> **newTable = new List<T> *[this->arraySize]();
         for (int i = 0; i < arraySize; i++)
         {
             newTable[i] = new List<T>();
@@ -82,7 +82,7 @@ void HashTable<T>::CheckandReorganize()
             ListNode<T> *temp = this->table[i]->GetHead();
             while (temp)
             {
-                int newHash = HashFunction(temp->GetData()->GetHash());//todo: add a get hash function to class and course
+                int newHash = HashFunction(temp->GetData()->GetHash());
                 T *newData(temp->GetData());
                 newTable[newHash]->Insert(newData);
                 temp = temp->GetNext();
@@ -126,7 +126,7 @@ ListNode<T> *HashTable<T>::Search(T *data) const
 {
     int hashFuncInput = data->GetHash();
     int hashNum = HashFunction(hashFuncInput);
-    List<T>* temp = this->table[hashNum];
+    List<T> *temp = this->table[hashNum];
     ListNode<T> *wantedNode = temp->Search(data);
     return wantedNode;
 }

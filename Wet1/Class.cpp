@@ -90,7 +90,7 @@ bool Class::operator==(const Class c) const
     return c.class_id == class_id && c.course_id == course_id;
 }
 
-Class::Class(Class const& c)
+Class::Class(Class const &c)
 {
     this->time = c.time;
     this->class_id = c.class_id;
