@@ -5,7 +5,8 @@
 #include "List.h"
 
 #define STARTING_SIZE 10
-#define FILL_RATIO 3
+#define FILL_RATIO 9
+#define DOWN_RATIO 3
 
 template<class T>
 class HashTable
@@ -17,7 +18,7 @@ private:
 
     int HashFunction(int input) const;
 
-    void CheckandReorganize();
+    void CheckandReorganize(int resizeFactor);
 
 public:
     explicit HashTable(int starting_size = STARTING_SIZE);
@@ -62,42 +63,37 @@ int HashTable<T>::HashFunction(int input) const
 }
 
 template<class T>
-void HashTable<T>::CheckandReorganize()
+void HashTable<T>::CheckandReorganize(int resizeFactor)
 {
-    if (filledNum < arraySize * FILL_RATIO)
+
+    int oldSize = this->arraySize;
+    List<T> **newTable = new List<T> *[resizeFactor]();
+    this->arraySize = resizeFactor;
+    for (int i = 0; i < arraySize; i++)
     {
-        return;
+        newTable[i] = new List<T>();
     }
-    else
+    for (int i = 0; i < oldSize; i++)
     {
-        int oldSize = this->arraySize;
-        this->arraySize = this->arraySize * 2;
-        List<T> **newTable = new List<T> *[this->arraySize]();
-        for (int i = 0; i < arraySize; i++)
+        ListNode<T> *temp = this->table[i]->GetHead();
+        while (temp)
         {
-            newTable[i] = new List<T>();
+            int newHash = HashFunction(temp->GetData()->GetHash());
+            T *newData(temp->GetData());
+            newTable[newHash]->Insert(newData);
+            temp = temp->GetNext();
         }
-        for (int i = 0; i < oldSize; i++)
-        {
-            ListNode<T> *temp = this->table[i]->GetHead();
-            while (temp)
-            {
-                int newHash = HashFunction(temp->GetData()->GetHash());
-                T *newData(temp->GetData());
-                newTable[newHash]->Insert(newData);
-                temp = temp->GetNext();
-            }
-        }
-
-        for (int i = 0; i < oldSize; i++)
-        {
-            delete table[i];
-        }
-
-        delete[] table;
-
-        this->table = newTable;
     }
+
+    for (int i = 0; i < oldSize; i++)
+    {
+        delete table[i];
+    }
+
+    delete[] table;
+
+    this->table = newTable;
+
 }
 
 template<class T>
@@ -108,7 +104,10 @@ void HashTable<T>::Insert(T *data)
     List<T> *temp = this->table[hashNum];
     temp->Insert(data);
     this->filledNum++;
-    CheckandReorganize();
+    if (filledNum > arraySize * FILL_RATIO)
+    {
+        CheckandReorganize(this->arraySize*2);
+    }
 }
 
 template<class T>
@@ -119,6 +118,10 @@ void HashTable<T>::Remove(T *data)
     List<T> *temp = this->table[hashNum];
     temp->Remove(data);
     this->filledNum--;
+    if (filledNum < arraySize * DOWN_RATIO && filledNum > STARTING_SIZE)
+    {
+        CheckandReorganize(this->arraySize/2);
+    }
 }
 
 template<class T>
